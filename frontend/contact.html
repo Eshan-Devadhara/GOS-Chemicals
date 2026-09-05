@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request a Quote | GOS Chemicals</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header class="site-header" id="site-header"></header>
+
+    <div class="page-header">
+        <div class="container">
+            <span class="section-eyebrow">Contact</span>
+            <h1>Request a Quote</h1>
+            <p>Tell us what you need and we'll respond with a detailed quotation.</p>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <form class="contact-form" id="contact-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="product">Product</label>
+                        <input type="text" id="product" name="product" placeholder="e.g. Castor Oil FSG Grade">
+                    </div>
+                    <div class="form-group">
+                        <label for="specification">Specification / Grade</label>
+                        <input type="text" id="specification" name="specification" placeholder="e.g. BS / IS / custom spec">
+                    </div>
+                    <div class="form-group">
+                        <label for="application">Intended Application</label>
+                        <input type="text" id="application" name="application" placeholder="e.g. Lubricant manufacturing">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Estimated Quantity</label>
+                        <input type="text" id="quantity" name="quantity" placeholder="e.g. 20 MT per month">
+                    </div>
+                    <div class="form-group">
+                        <label for="packaging">Preferred Packaging</label>
+                        <input type="text" id="packaging" name="packaging" placeholder="e.g. Drums / Flexi-tank / ISO tank">
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Delivery Destination</label>
+                        <input type="text" id="destination" name="destination" placeholder="e.g. Rotterdam, Netherlands">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Your Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="Full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required placeholder="you@company.com">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="message">Additional Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Any other details or requirements..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;">Submit Enquiry</button>
+                <div class="form-status" id="form-status"></div>
+            </form>
+        </div>
+    </section>
+
+    <footer class="site-footer" id="site-footer"></footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/contact-form.js"></script>
+</body>
+</html>

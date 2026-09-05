@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Edit' if industry else 'New' }} Industry{% endblock %}
+{% block content %}
+<div class="admin-header">
+    <h1>{{ 'Edit' if industry else 'New' }} Industry</h1>
+    <a href="{{ url_for('admin.industries_list') }}" class="btn btn-primary">← Back</a>
+</div>
+<div class="card">
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" value="{{ industry.name if industry else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3">{{ industry.description if industry else '' }}</textarea>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 1.5rem;">
+            <div class="form-group">
+                <label for="display_order">Display Order</label>
+                <input type="number" id="display_order" name="display_order" value="{{ industry.display_order if industry else 0 }}">
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="published" {{ 'selected' if industry and industry.status == 'published' }}>Published</option>
+                    <option value="draft" {{ 'selected' if industry and industry.status == 'draft' }}>Draft</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'Update' if industry else 'Create' }}</button>
+    </form>
+</div>
+{% endblock %}

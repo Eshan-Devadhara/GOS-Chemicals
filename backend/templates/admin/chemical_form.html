@@ -1,0 +1,92 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Edit' if chemical else 'New' }} Chemical{% endblock %}
+{% block content %}
+<div class="admin-header">
+    <h1>{{ 'Edit' if chemical else 'New' }} Chemical</h1>
+    <a href="{{ url_for('admin.chemicals_list') }}" class="btn btn-primary">← Back to List</a>
+</div>
+<div class="card">
+    <form method="POST" enctype="multipart/form-data">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 1.5rem;">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" value="{{ chemical.name if chemical else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="slug">Slug</label>
+                <input type="text" id="slug" name="slug" value="{{ chemical.slug if chemical else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    <option value="Core" {{ 'selected' if chemical and chemical.category == 'Core' }}>Core</option>
+                    <option value="Custom" {{ 'selected' if chemical and chemical.category == 'Custom' }}>Custom</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="draft" {{ 'selected' if chemical and chemical.status == 'draft' }}>Draft</option>
+                    <option value="published" {{ 'selected' if chemical and chemical.status == 'published' }}>Published</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="display_order">Display Order</label>
+                <input type="number" id="display_order" name="display_order" value="{{ chemical.display_order if chemical else 0 }}">
+            </div>
+            <div class="form-group">
+                <label for="cta_label">CTA Label</label>
+                <input type="text" id="cta_label" name="cta_label" value="{{ chemical.cta_label if chemical else '' }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="summary">Summary</label>
+            <textarea id="summary" name="summary" rows="2">{{ chemical.summary if chemical else '' }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="6">{{ chemical.description if chemical else '' }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="specification">Specification</label>
+            <textarea id="specification" name="specification" rows="3">{{ chemical.specification if chemical else '' }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="applications">Applications (comma-separated)</label>
+            <textarea id="applications" name="applications" rows="2">{{ chemical.applications if chemical else '' }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="packaging">Packaging</label>
+            <input type="text" id="packaging" name="packaging" value="{{ chemical.packaging if chemical else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="image">Image (jpg/png/webp, max 5MB)</label>
+            <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.webp">
+            {% if chemical and chemical.image_url %}
+            <p style="margin-top:0.5rem; font-size:0.8rem; color:var(--admin-text-muted);">Current: {{ chemical.image_url }}</p>
+            {% endif %}
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 1.5rem;">
+            <div class="form-group">
+                <label for="seo_title">SEO Title</label>
+                <input type="text" id="seo_title" name="seo_title" value="{{ chemical.seo_title if chemical else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="seo_description">SEO Description</label>
+                <textarea id="seo_description" name="seo_description" rows="2">{{ chemical.seo_description if chemical else '' }}</textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'Update' if chemical else 'Create' }} Chemical</button>
+    </form>
+</div>
+<script>
+    // Auto-generate slug from name
+    const nameInput = document.getElementById('name');
+    const slugInput = document.getElementById('slug');
+    {% if not chemical %}
+    nameInput.addEventListener('input', () => {
+        slugInput.value = nameInput.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    });
+    {% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,32 @@
+/* ==========================================================================
+   Design Tokens — GOS Chemicals
+   All colors, fonts, and spacing referenced by var() throughout main.css.
+   Change these to re-theme the entire site.
+   ========================================================================== */
+
+:root {
+    /* Colors */
+    --color-bg: #FAF8F3;
+    --color-surface: #FFFFFF;
+    --color-primary: #1F3A34;
+    --color-primary-dark: #142623;
+    --color-accent: #B08D57;
+    --color-accent-hover: #9a7a48;
+    --color-text: #2B2B2B;
+    --color-text-muted: #6B6B6B;
+    --color-border: #E4E0D8;
+
+    /* Typography */
+    --font-heading: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    /* Spacing */
+    --spacing-section: 6rem;
+    --spacing-block: 2rem;
+    --radius-base: 4px;
+    --max-width: 1200px;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.25s ease;
+}

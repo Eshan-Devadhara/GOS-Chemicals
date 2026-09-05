@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Chemical Manufacturing | GOS Chemicals</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header class="site-header" id="site-header"></header>
+
+    <div class="page-header">
+        <div class="container">
+            <span class="section-eyebrow">Custom Manufacturing</span>
+            <h1>Custom Chemical Manufacturing</h1>
+            <p>We manufacture chemicals to your specification.</p>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container" style="max-width:800px;">
+            <p style="color:var(--color-text-muted); line-height:1.7; margin-bottom:2rem;">
+                Beyond our core product lines — Castor Oil & Derivatives, Chlorinated Paraffin Wax, and Bleaching Clay — GOS Chemicals has the capability and infrastructure to manufacture chemicals to your specification. Whether you need a standard industrial chemical or a custom formulation, we work with you to match the product to your process requirements.
+            </p>
+
+            <h2 style="margin-bottom:1.5rem;">Categories We Serve</h2>
+            <ul class="custom-categories" id="custom-categories-list">
+                <li>Loading...</li>
+            </ul>
+
+            <div style="margin-top:3rem; padding:2rem; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-base);">
+                <h3 style="margin-bottom:0.5rem;">Have a Custom Requirement?</h3>
+                <p style="color:var(--color-text-muted); margin-bottom:1.5rem;">Contact us with your product name, required specification or grade, intended application, and estimated quantity. We'll discuss feasibility and provide a detailed proposal.</p>
+                <a href="contact.html" class="btn btn-primary">Discuss Your Requirement</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer" id="site-footer"></footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const list = document.getElementById('custom-categories-list');
+            try {
+                const cats = await apiGet('/custom-categories');
+                if (cats.length) {
+                    list.innerHTML = cats.map(c => `<li>${c.name}</li>`).join('');
+                } else {
+                    list.innerHTML = '<li>Contact us for details.</li>';
+                }
+            } catch (e) {
+                list.innerHTML = '<li>Failed to load categories.</li>';
+            }
+        });
+    </script>
+</body>
+</html>

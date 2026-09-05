@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} — GOS Chemicals</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --admin-bg: #f4f5f7;
+            --admin-surface: #ffffff;
+            --admin-primary: #1F3A34;
+            --admin-primary-light: #2a5248;
+            --admin-accent: #B08D57;
+            --admin-text: #2B2B2B;
+            --admin-text-muted: #6B6B6B;
+            --admin-border: #e0e0e0;
+            --admin-danger: #c0392b;
+            --admin-success: #27ae60;
+            --admin-radius: 6px;
+        }
+        body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--admin-bg); color: var(--admin-text); line-height: 1.5; }
+        a { color: var(--admin-primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .admin-layout { display: flex; min-height: 100vh; }
+        .admin-sidebar { width: 240px; background: var(--admin-primary); color: #fff; padding: 1.5rem 0; flex-shrink: 0; }
+        .admin-sidebar h2 { font-size: 1rem; padding: 0 1.25rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 0.5rem; font-weight: 600; letter-spacing: 0.03em; }
+        .admin-sidebar nav a { display: block; padding: 0.6rem 1.25rem; color: rgba(255,255,255,0.8); font-size: 0.9rem; transition: background 0.15s; }
+        .admin-sidebar nav a:hover, .admin-sidebar nav a.active { background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; }
+
+        .admin-main { flex: 1; padding: 2rem 2.5rem; overflow-y: auto; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .admin-header h1 { font-size: 1.5rem; font-weight: 600; }
+
+        .btn { display: inline-block; padding: 0.5rem 1.25rem; border-radius: var(--admin-radius); font-size: 0.875rem; font-weight: 500; cursor: pointer; border: none; transition: background 0.15s; text-decoration: none; }
+        .btn-primary { background: var(--admin-primary); color: #fff; }
+        .btn-primary:hover { background: var(--admin-primary-light); text-decoration: none; }
+        .btn-accent { background: var(--admin-accent); color: #fff; }
+        .btn-danger { background: var(--admin-danger); color: #fff; }
+        .btn-danger:hover { background: #a93226; }
+        .btn-sm { padding: 0.3rem 0.75rem; font-size: 0.8rem; }
+
+        .card { background: var(--admin-surface); border-radius: var(--admin-radius); border: 1px solid var(--admin-border); padding: 1.5rem; margin-bottom: 1.5rem; }
+
+        table { width: 100%; border-collapse: collapse; background: var(--admin-surface); border-radius: var(--admin-radius); overflow: hidden; border: 1px solid var(--admin-border); }
+        th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--admin-border); font-size: 0.875rem; }
+        th { background: var(--admin-bg); font-weight: 600; color: var(--admin-text-muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+        tr:last-child td { border-bottom: none; }
+
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 0.35rem; font-size: 0.875rem; color: var(--admin-text-muted); }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--admin-border); border-radius: var(--admin-radius); font-size: 0.9rem; font-family: inherit; background: #fff; }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+
+        .flash { padding: 0.75rem 1rem; border-radius: var(--admin-radius); margin-bottom: 1rem; font-size: 0.875rem; }
+        .flash-success { background: #eafaf1; color: var(--admin-success); border: 1px solid #a3dfbf; }
+        .flash-error { background: #fdedec; color: var(--admin-danger); border: 1px solid #f5b7b1; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--admin-surface); border: 1px solid var(--admin-border); border-radius: var(--admin-radius); padding: 1.25rem; }
+        .stat-card .stat-value { font-size: 2rem; font-weight: 700; color: var(--admin-primary); }
+        .stat-card .stat-label { font-size: 0.8rem; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
+
+        .inline-form { display: flex; gap: 0.5rem; align-items: end; }
+        .inline-form input { flex: 1; }
+
+        @media (max-width: 768px) {
+            .admin-layout { flex-direction: column; }
+            .admin-sidebar { width: 100%; }
+            .admin-main { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <h2 style="display:flex; align-items:center; gap:0.6rem;">
+            <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="GOS Logo" style="height:28px; width:auto; border-radius:4px;">
+            <span>GOS Admin</span>
+        </h2>
+        <nav>
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.chemicals_list') }}">Chemicals</a>
+            <a href="{{ url_for('admin.industries_list') }}">Industries</a>
+            <a href="{{ url_for('admin.faqs_list') }}">FAQs</a>
+            <a href="{{ url_for('admin.custom_categories') }}">Custom Categories</a>
+            <a href="{{ url_for('admin.settings') }}">Settings</a>
+            <a href="{{ url_for('admin.contact_submissions') }}">Contact Submissions</a>
+            <a href="/" target="_blank">View Site →</a>
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </nav>
+    </aside>
+    <main class="admin-main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% extends "admin/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="admin-header">
+    <h1>Dashboard</h1>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ chemical_count }}</div>
+        <div class="stat-label">Chemicals</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ industry_count }}</div>
+        <div class="stat-label">Industries</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ faq_count }}</div>
+        <div class="stat-label">FAQs</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ submission_count }}</div>
+        <div class="stat-label">Contact Submissions</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size:1.1rem; margin-bottom:1rem;">Recent Contact Submissions</h2>
+    {% if recent_submissions %}
+    <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Product</th><th>Date</th></tr></thead>
+        <tbody>
+        {% for s in recent_submissions %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.email }}</td>
+            <td>{{ s.product or '—' }}</td>
+            <td>{{ s.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: var(--admin-text-muted); font-size: 0.9rem;">No submissions yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

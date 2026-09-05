@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="admin-header">
+    <h1>Site Settings</h1>
+</div>
+<div class="card">
+    <form method="POST">
+        {% for s in settings %}
+        <div class="form-group">
+            <label for="setting-{{ s.key }}">{{ s.key }}</label>
+            {% if s.value and s.value|length > 100 %}
+            <textarea id="setting-{{ s.key }}" name="{{ s.key }}" rows="4">{{ s.value }}</textarea>
+            {% else %}
+            <input type="text" id="setting-{{ s.key }}" name="{{ s.key }}" value="{{ s.value or '' }}">
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+    </form>
+</div>
+{% endblock %}

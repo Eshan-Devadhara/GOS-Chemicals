@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — GOS Chemicals Admin</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: #f4f5f7; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .login-box { background: #fff; padding: 2.5rem; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); width: 100%; max-width: 400px; }
+        .login-box h1 { font-size: 1.25rem; font-weight: 600; color: #1F3A34; margin-bottom: 0.25rem; }
+        .login-box p { font-size: 0.875rem; color: #6B6B6B; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: #6B6B6B; margin-bottom: 0.3rem; }
+        .form-group input { width: 100%; padding: 0.6rem 0.75rem; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 0.9rem; }
+        .btn { display: block; width: 100%; padding: 0.7rem; background: #1F3A34; color: #fff; border: none; border-radius: 6px; font-size: 0.9rem; font-weight: 500; cursor: pointer; }
+        .btn:hover { background: #2a5248; }
+        .flash { padding: 0.6rem 0.75rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.85rem; background: #fdedec; color: #c0392b; border: 1px solid #f5b7b1; }
+    </style>
+</head>
+<body>
+<div class="login-box">
+    <h1>GOS Chemicals</h1>
+    <p>Admin Panel Login</p>
+    {% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% endwith %}
+    <form method="POST">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn">Sign In</button>
+    </form>
+</div>
+</body>
+</html>
