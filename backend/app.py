@@ -63,8 +63,11 @@ def initialize_database(app):
             db.session.commit()
             print(f"Default admin user created: {app.config['ADMIN_EMAIL']}")
 
-    # Ensure uploads directory exists
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    # Ensure uploads directory exists (skip on read-only filesystems like Vercel)
+    try:
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    except OSError:
+        pass
 
 
 if __name__ == '__main__':

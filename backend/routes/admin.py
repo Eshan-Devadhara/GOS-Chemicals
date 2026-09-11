@@ -87,11 +87,15 @@ def _populate_chemical(chemical, req):
 
     file = req.files.get('image')
     if file and file.filename and allowed_file(file.filename):
-        filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
-        filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        file.save(filepath)
-        chemical.image_url = f"/static/uploads/{filename}"
+        try:
+            filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
+            filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            file.save(filepath)
+            chemical.image_url = f"/static/uploads/{filename}"
+        except OSError:
+            from flask import flash
+            flash('Image upload is not available in this environment.', 'warning')
 
 
 # --- Industries CRUD ---

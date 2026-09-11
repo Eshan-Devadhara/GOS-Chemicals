@@ -1,7 +1,10 @@
 database.db
 venv/
+instance/
 __pycache__/
 .env
 *.pyc
 /backend/static/uploads/*
 !/backend/static/uploads/.gitkeep
+.vscode/
+

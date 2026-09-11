@@ -80,13 +80,13 @@
     </form>
 </div>
 <script>
-    // Auto-generate slug from name
+    // Auto-generate slug from name for new entries
     const nameInput = document.getElementById('name');
     const slugInput = document.getElementById('slug');
-    {% if not chemical %}
-    nameInput.addEventListener('input', () => {
-        slugInput.value = nameInput.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    });
-    {% endif %}
+    if (nameInput && slugInput && !slugInput.value) {
+        nameInput.addEventListener('input', () => {
+            slugInput.value = nameInput.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        });
+    }
 </script>
 {% endblock %}

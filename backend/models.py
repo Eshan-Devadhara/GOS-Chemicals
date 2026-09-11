@@ -64,7 +64,12 @@ class CustomCategory(db.Model):
     display_order = db.Column(db.Integer, default=0)
 
 
-class AdminUser(UserMixin, db.Model):
+class AdminUser(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(200), unique=True, nullable=False)
     password_hash = db.Column(db.String(300), nullable=False)
+
+    def __init__(self, email: str = "", password_hash: str = "", **kwargs):
+        super().__init__(email=email, password_hash=password_hash, **kwargs)
+
+
