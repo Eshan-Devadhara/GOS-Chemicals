@@ -5,11 +5,14 @@ from config import Config
 from extensions import db, login_manager
 from models import AdminUser
 
+import tempfile
+
 
 def create_app():
     app = Flask(__name__,
                 static_folder='static',
-                template_folder='templates')
+                template_folder='templates',
+                instance_path=os.path.join(tempfile.gettempdir(), 'flask_instance'))
     app.config.from_object(Config)
 
     db.init_app(app)
