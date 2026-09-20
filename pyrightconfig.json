@@ -1,0 +1,14 @@
+{
+  "executionEnvironments": [
+    {
+      "root": "backend",
+      "extraPaths": ["backend"]
+    },
+    {
+      "root": "api",
+      "extraPaths": ["backend"]
+    }
+  ],
+  "reportGeneralTypeIssues": "warning",
+  "typeCheckingMode": "basic"
+}
