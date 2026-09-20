@@ -9,10 +9,13 @@ import tempfile
 
 
 def create_app():
+    # Use explicitly /tmp/instance for Vercel, and tempfile for local
+    instance_path = '/tmp/instance' if os.environ.get('VERCEL') else os.path.join(tempfile.gettempdir(), 'instance')
+    
     app = Flask(__name__,
                 static_folder='static',
                 template_folder='templates',
-                instance_path=os.path.join(tempfile.gettempdir(), 'instance'))
+                instance_path=instance_path)
     
     try:
         os.makedirs(app.instance_path, exist_ok=True)
