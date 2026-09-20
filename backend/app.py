@@ -12,7 +12,13 @@ def create_app():
     app = Flask(__name__,
                 static_folder='static',
                 template_folder='templates',
-                instance_path=os.path.join(tempfile.gettempdir(), 'flask_instance'))
+                instance_path=os.path.join(tempfile.gettempdir(), 'instance'))
+    
+    try:
+        os.makedirs(app.instance_path, exist_ok=True)
+    except OSError:
+        pass
+    
     app.config.from_object(Config)
 
     db.init_app(app)
