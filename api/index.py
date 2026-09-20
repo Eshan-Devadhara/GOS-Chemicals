@@ -22,4 +22,9 @@ app = create_app()
 
 # Initialize database tables + seed data on cold start.
 # In serverless, this runs once per container lifecycle.
-initialize_database(app)
+# Wrapped in try/except so a DB config error returns a useful response
+# instead of crashing the entire function.
+try:
+    initialize_database(app)
+except Exception as e:
+    print(f"[WARN] initialize_database failed: {e}")
