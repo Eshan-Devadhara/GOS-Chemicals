@@ -18,14 +18,20 @@ def _resolve_database_uri():
         return uri
     # Vercel read-only filesystem fallback uses /tmp
     if os.getenv('VERCEL'):
-        return 'sqlite:////tmp/gos_chemicals_instance/database.db'
+        db_dir = os.path.abspath('/tmp/gos_chemicals_instance')
+        try:
+            os.makedirs(db_dir, exist_ok=True)
+        except OSError:
+            pass
+        db_path = os.path.join(db_dir, 'database.db').replace(os.sep, '/')
+        return f'sqlite:///{db_path}'
     # Local development fallback
     return 'sqlite:///database.db'
 
 
 def _is_production():
     """Return True when running in a production environment."""
-    return bool(os.getenv('VERCEL') or os.getenv('PRODUCTION'))
+    return bool(os.getenv('PRODUCTION'))
 
 
 class Config:
@@ -42,7 +48,7 @@ class Config:
 
     # --- Uploads ---
     if os.getenv('VERCEL'):
-        UPLOAD_FOLDER = '/tmp/gos_chemicals_instance/uploads'
+        UPLOAD_FOLDER = os.path.join(os.path.abspath('/tmp/gos_chemicals_instance'), 'uploads')
     else:
         UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5 MB
@@ -71,6 +77,6 @@ class Config:
         ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'change-this-password')
 
     # --- Session / Cookies ---
-    SESSION_COOKIE_SECURE = _is_production()
+    SESSION_COOKIE_SECURE = bool(os.getenv('VERCEL') or os.getenv('PRODUCTION'))
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'

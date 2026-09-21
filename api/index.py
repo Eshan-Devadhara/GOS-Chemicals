@@ -19,27 +19,15 @@ for path in (root_dir, backend_dir):
     if path not in sys.path:
         sys.path.insert(0, path)
 
+from app import create_app, initialize_database  # noqa: E402
+
+app = create_app()
+
+# Initialize database tables + seed data on cold start.
+# In serverless, this runs once per container lifecycle.
 try:
-    from app import create_app, initialize_database  # noqa: E402
-
-    app = create_app()
-
-    # Initialize database tables + seed data on cold start.
-    # In serverless, this runs once per container lifecycle.
-    try:
-        initialize_database(app)
-    except Exception as e:
-        traceback.print_exc(file=sys.stderr)
-        print(f"[ERROR] initialize_database failed: {e}", file=sys.stderr, flush=True)
-
-except Exception as startup_err:
+    initialize_database(app)
+except Exception as e:
     traceback.print_exc(file=sys.stderr)
-    print(f"[CRITICAL] Application startup failed: {startup_err}", file=sys.stderr, flush=True)
+    print(f"[ERROR] initialize_database failed: {e}", file=sys.stderr, flush=True)
 
-    # Diagnostic fallback WSGI callable so startup failures are visible in responses and logs
-    def app(environ, start_response):
-        status = '500 Internal Server Error'
-        response_headers = [('Content-Type', 'text/plain; charset=utf-8')]
-        start_response(status, response_headers)
-        tb = traceback.format_exc()
-        return [f"500 Application Startup Error:\n{startup_err}\n\nTraceback:\n{tb}".encode('utf-8')]

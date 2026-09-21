@@ -1,4 +1,6 @@
 import os
+import sys
+import traceback
 from flask import Flask, send_from_directory, jsonify
 import bcrypt
 from config import Config
@@ -7,7 +9,7 @@ from models import AdminUser
 
 
 def create_app():
-    instance_path = '/tmp/gos_chemicals_instance' if os.getenv('VERCEL') else None
+    instance_path = os.path.abspath('/tmp/gos_chemicals_instance') if os.getenv('VERCEL') else None
 
     if instance_path:
         try:
@@ -72,11 +74,14 @@ def create_app():
     def not_found(e):
         if _is_api_request():
             return jsonify({'error': 'Not found'}), 404
-        return send_from_directory(frontend_dir, 'index.html'), 404
+        try:
+            return send_from_directory(frontend_dir, 'index.html'), 404
+        except Exception:
+            return '<h1>404 — Page Not Found</h1>', 404
 
     @app.errorhandler(500)
     def internal_error(e):
-        app.logger.error(f'Internal server error: {e}')
+        app.logger.error(f'Internal server error: {e}', exc_info=True)
         if _is_api_request():
             return jsonify({'error': 'Internal server error'}), 500
         return '<h1>500 — Internal Server Error</h1>', 500
@@ -92,42 +97,47 @@ def _is_api_request():
 
 def initialize_database(app):
     with app.app_context():
-        db.create_all()
-
-        # Idempotent schema migration for cloudinary_public_id
         try:
-            from sqlalchemy import inspect, text
-            inspector = inspect(db.engine)
-            columns = [col['name'] for col in inspector.get_columns('chemical')]
-            if 'cloudinary_public_id' not in columns:
-                db.session.execute(text('ALTER TABLE chemical ADD COLUMN cloudinary_public_id VARCHAR(300)'))
+            db.create_all()
+
+            # Idempotent schema migration for cloudinary_public_id
+            try:
+                from sqlalchemy import inspect, text
+                inspector = inspect(db.engine)
+                columns = [col['name'] for col in inspector.get_columns('chemical')]
+                if 'cloudinary_public_id' not in columns:
+                    db.session.execute(text('ALTER TABLE chemical ADD COLUMN cloudinary_public_id VARCHAR(300)'))
+                    db.session.commit()
+                    app.logger.info("Migrated schema: added cloudinary_public_id to chemical table")
+            except Exception as e:
+                app.logger.error(f"Schema migration error: {e}", exc_info=True)
+
+            # Seed data only if tables are empty
+            from seed_data import seed_initial_data
+            seed_initial_data()
+
+            # Create default admin user if none exists
+            if AdminUser.query.count() == 0:
+                admin_password = app.config['ADMIN_PASSWORD']
+                if admin_password in ('change-this-password', 'admin123', 'password', ''):
+                    app.logger.warning(
+                        'ADMIN_PASSWORD is not set or uses a default value. '
+                        'Set a strong password via the ADMIN_PASSWORD environment variable.'
+                    )
+                hashed = bcrypt.hashpw(
+                    admin_password.encode('utf-8'),
+                    bcrypt.gensalt()
+                ).decode('utf-8')
+                admin = AdminUser()
+                admin.email = app.config['ADMIN_EMAIL']
+                admin.password_hash = hashed
+                db.session.add(admin)
                 db.session.commit()
-                app.logger.info("Migrated schema: added cloudinary_public_id to chemical table")
+                app.logger.info(f"Default admin user created: {app.config['ADMIN_EMAIL']}")
         except Exception as e:
-            app.logger.error(f"Schema migration error: {e}", exc_info=True)
-
-        # Seed data only if tables are empty
-        from seed_data import seed_initial_data
-        seed_initial_data()
-
-        # Create default admin user if none exists
-        if AdminUser.query.count() == 0:
-            admin_password = app.config['ADMIN_PASSWORD']
-            if admin_password in ('change-this-password', 'admin123', 'password', ''):
-                app.logger.warning(
-                    'ADMIN_PASSWORD is not set or uses a default value. '
-                    'Set a strong password via the ADMIN_PASSWORD environment variable.'
-                )
-            hashed = bcrypt.hashpw(
-                admin_password.encode('utf-8'),
-                bcrypt.gensalt()
-            ).decode('utf-8')
-            admin = AdminUser()
-            admin.email = app.config['ADMIN_EMAIL']
-            admin.password_hash = hashed
-            db.session.add(admin)
-            db.session.commit()
-            app.logger.info(f"Default admin user created: {app.config['ADMIN_EMAIL']}")
+            traceback.print_exc(file=sys.stderr)
+            app.logger.error(f"Database initialization failed: {e}", exc_info=True)
+            raise
 
     # Ensure uploads directory exists (skip on read-only filesystems like Vercel)
     try:
