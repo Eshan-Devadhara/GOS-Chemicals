@@ -16,6 +16,9 @@ def _resolve_database_uri():
         if uri.startswith('postgres://'):
             uri = uri.replace('postgres://', 'postgresql://', 1)
         return uri
+    # Vercel read-only filesystem fallback uses /tmp
+    if os.getenv('VERCEL'):
+        return 'sqlite:////tmp/gos_chemicals_instance/database.db'
     # Local development fallback
     return 'sqlite:///database.db'
 
@@ -38,7 +41,10 @@ class Config:
     }
 
     # --- Uploads ---
-    UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
+    if os.getenv('VERCEL'):
+        UPLOAD_FOLDER = '/tmp/gos_chemicals_instance/uploads'
+    else:
+        UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5 MB
 
     # --- Cloudinary (production image uploads) ---

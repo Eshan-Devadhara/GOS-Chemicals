@@ -10,6 +10,10 @@ def create_app():
     instance_path = '/tmp/gos_chemicals_instance' if os.getenv('VERCEL') else None
 
     if instance_path:
+        try:
+            os.makedirs(instance_path, exist_ok=True)
+        except OSError:
+            pass
         app = Flask(
             __name__,
             static_folder='static',
@@ -100,7 +104,7 @@ def initialize_database(app):
                 db.session.commit()
                 app.logger.info("Migrated schema: added cloudinary_public_id to chemical table")
         except Exception as e:
-            app.logger.error(f"Schema migration error: {e}")
+            app.logger.error(f"Schema migration error: {e}", exc_info=True)
 
         # Seed data only if tables are empty
         from seed_data import seed_initial_data
@@ -118,7 +122,9 @@ def initialize_database(app):
                 admin_password.encode('utf-8'),
                 bcrypt.gensalt()
             ).decode('utf-8')
-            admin = AdminUser(email=app.config['ADMIN_EMAIL'], password_hash=hashed)
+            admin = AdminUser()
+            admin.email = app.config['ADMIN_EMAIL']
+            admin.password_hash = hashed
             db.session.add(admin)
             db.session.commit()
             app.logger.info(f"Default admin user created: {app.config['ADMIN_EMAIL']}")

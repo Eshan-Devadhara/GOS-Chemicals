@@ -8,23 +8,38 @@ backend package and exposes it for Vercel.
 
 import os
 import sys
+import traceback
 
-# Add the backend directory to sys.path so that existing imports
-# (config, extensions, models, routes.*) resolve without changes.
-backend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'backend')
-backend_dir = os.path.normpath(backend_dir)
-if backend_dir not in sys.path:
-    sys.path.insert(0, backend_dir)
+# Add both the project root and backend directory to sys.path so that
+# all module references resolve reliably in serverless environments.
+root_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+backend_dir = os.path.normpath(os.path.join(root_dir, 'backend'))
 
-from app import create_app, initialize_database  # noqa: E402
+for path in (root_dir, backend_dir):
+    if path not in sys.path:
+        sys.path.insert(0, path)
 
-app = create_app()
-
-# Initialize database tables + seed data on cold start.
-# In serverless, this runs once per container lifecycle.
-# Wrapped in try/except so a DB config error returns a useful response
-# instead of crashing the entire function.
 try:
-    initialize_database(app)
-except Exception as e:
-    print(f"[WARN] initialize_database failed: {e}")
+    from app import create_app, initialize_database  # noqa: E402
+
+    app = create_app()
+
+    # Initialize database tables + seed data on cold start.
+    # In serverless, this runs once per container lifecycle.
+    try:
+        initialize_database(app)
+    except Exception as e:
+        traceback.print_exc(file=sys.stderr)
+        print(f"[ERROR] initialize_database failed: {e}", file=sys.stderr, flush=True)
+
+except Exception as startup_err:
+    traceback.print_exc(file=sys.stderr)
+    print(f"[CRITICAL] Application startup failed: {startup_err}", file=sys.stderr, flush=True)
+
+    # Diagnostic fallback WSGI callable so startup failures are visible in responses and logs
+    def app(environ, start_response):
+        status = '500 Internal Server Error'
+        response_headers = [('Content-Type', 'text/plain; charset=utf-8')]
+        start_response(status, response_headers)
+        tb = traceback.format_exc()
+        return [f"500 Application Startup Error:\n{startup_err}\n\nTraceback:\n{tb}".encode('utf-8')]
