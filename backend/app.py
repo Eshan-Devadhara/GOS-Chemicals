@@ -90,6 +90,18 @@ def initialize_database(app):
     with app.app_context():
         db.create_all()
 
+        # Idempotent schema migration for cloudinary_public_id
+        try:
+            from sqlalchemy import inspect, text
+            inspector = inspect(db.engine)
+            columns = [col['name'] for col in inspector.get_columns('chemical')]
+            if 'cloudinary_public_id' not in columns:
+                db.session.execute(text('ALTER TABLE chemical ADD COLUMN cloudinary_public_id VARCHAR(300)'))
+                db.session.commit()
+                app.logger.info("Migrated schema: added cloudinary_public_id to chemical table")
+        except Exception as e:
+            app.logger.error(f"Schema migration error: {e}")
+
         # Seed data only if tables are empty
         from seed_data import seed_initial_data
         seed_initial_data()
