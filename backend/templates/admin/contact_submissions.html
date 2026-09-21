@@ -5,7 +5,7 @@
     <h1>Contact Submissions</h1>
 </div>
 <table>
-    <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Product</th><th>Quantity</th><th>Destination</th><th>Message</th></tr></thead>
+    <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Product</th><th>Specification</th><th>Application</th><th>Quantity</th><th>Packaging</th><th>Destination</th><th>Message</th></tr></thead>
     <tbody>
     {% for s in submissions %}
     <tr>
@@ -13,7 +13,10 @@
         <td>{{ s.name }}</td>
         <td>{{ s.email }}</td>
         <td>{{ s.product or '—' }}</td>
+        <td>{{ s.specification or '—' }}</td>
+        <td>{{ s.application or '—' }}</td>
         <td>{{ s.quantity or '—' }}</td>
+        <td>{{ s.packaging or '—' }}</td>
         <td>{{ s.destination or '—' }}</td>
         <td style="max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ s.message or '—' }}</td>
     </tr>
