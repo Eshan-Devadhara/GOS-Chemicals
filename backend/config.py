@@ -47,12 +47,11 @@ class Config:
     UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5 MB
 
-    # --- S3 (production image uploads) ---
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-    AWS_REGION = os.getenv('AWS_REGION', 'us-east-1')
-    AWS_S3_BUCKET = os.getenv('AWS_S3_BUCKET')
-    USE_S3 = bool(AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and AWS_S3_BUCKET)
+    # --- Cloudinary (production image uploads) ---
+    CLOUDINARY_CLOUD_NAME = os.getenv('CLOUDINARY_CLOUD_NAME')
+    CLOUDINARY_API_KEY = os.getenv('CLOUDINARY_API_KEY')
+    CLOUDINARY_API_SECRET = os.getenv('CLOUDINARY_API_SECRET')
+    USE_CLOUDINARY = bool(CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET)
 
     # --- Admin ---
     ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@example.com')

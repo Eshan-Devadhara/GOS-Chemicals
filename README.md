@@ -7,7 +7,7 @@ A lightweight, professional website for GOS Chemicals — a specialty chemical m
 - **Public Website:** Home, Products, Product Detail, Custom Manufacturing, Industries, FAQ, Contact
 - **Admin Panel:** Full CRUD for chemicals, industries, FAQs, custom categories, site settings, and contact submission viewer
 - **Fully Dynamic:** All content served from the database via API — no hardcoded text in the frontend
-- **Production-Ready:** PostgreSQL, S3 image uploads, secure sessions, Vercel serverless deployment
+- **Production-Ready:** PostgreSQL, Cloudinary image uploads, secure sessions, Vercel serverless deployment
 
 ## Tech Stack
 
@@ -16,7 +16,7 @@ A lightweight, professional website for GOS Chemicals — a specialty chemical m
 | Frontend | HTML + CSS + JavaScript (no framework) |
 | Backend | Python 3.10+ / Flask |
 | Database | PostgreSQL (production) / SQLite (local dev) |
-| File Storage | Amazon S3 (production) / local filesystem (dev) |
+| File Storage | Cloudinary (production) / local filesystem (dev) |
 | Admin | Server-rendered Jinja2 templates |
 | Auth | Flask-Login + bcrypt |
 | Deployment | Vercel (Python serverless) |
@@ -37,6 +37,7 @@ python app.py
 - **Admin:** http://localhost:5000/admin/login
 
 Local development uses SQLite automatically (no PostgreSQL required).
+Image uploads are stored locally when Cloudinary is not configured.
 
 ## Vercel Deployment
 
@@ -51,16 +52,15 @@ Set these in **Vercel Dashboard → Settings → Environment Variables**:
 | `ADMIN_EMAIL` | Admin login email |
 | `ADMIN_PASSWORD` | Strong admin password |
 
-### Optional Environment Variables (S3 Image Uploads)
+### Cloudinary Environment Variables (Image Uploads)
 
 | Variable | Description |
 |---|---|
-| `AWS_ACCESS_KEY_ID` | AWS IAM access key |
-| `AWS_SECRET_ACCESS_KEY` | AWS IAM secret |
-| `AWS_REGION` | S3 bucket region (default: `us-east-1`) |
-| `AWS_S3_BUCKET` | S3 bucket name |
+| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name |
+| `CLOUDINARY_API_KEY` | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
 
-If S3 is not configured, image uploads will not persist across Vercel deployments.
+Without Cloudinary configured, image uploads will not persist across Vercel deployments.
 
 ### Deployment Steps
 
@@ -75,37 +75,37 @@ If S3 is not configured, image uploads will not persist across Vercel deployment
 
 ```
 /backend
-  app.py              — Flask entry point & app factory
-  config.py           — Configuration from environment variables
-  models.py           — SQLAlchemy models
-  seed_data.py        — Starter content (only seeds empty tables)
-  s3_upload.py        — S3 upload helper (production image storage)
-  extensions.py       — db, login_manager instances
+  app.py                — Flask entry point & app factory
+  config.py             — Configuration from environment variables
+  models.py             — SQLAlchemy models
+  seed_data.py          — Starter content (only seeds empty tables)
+  cloudinary_upload.py  — Cloudinary upload helper (production image storage)
+  extensions.py         — db, login_manager instances
   /routes
-    api.py            — Public JSON API
-    admin.py          — Admin panel CRUD
-    auth.py           — Login/logout
-  /templates/admin    — Jinja2 admin templates
-  /static/uploads     — Product images (local dev only)
+    api.py              — Public JSON API
+    admin.py            — Admin panel CRUD
+    auth.py             — Login/logout
+  /templates/admin      — Jinja2 admin templates
+  /static/uploads       — Product images (local dev only)
 
 /frontend
-  index.html          — Home
-  products.html       — Product listing
-  product-detail.html — Single product (reads ?slug= from URL)
+  index.html            — Home
+  products.html         — Product listing
+  product-detail.html   — Single product (reads ?slug= from URL)
   custom-manufacturing.html
   industries.html
   faq.html
   contact.html
   /css
-    tokens.css        — Design tokens (colors, fonts, spacing)
-    main.css          — All component styles
+    tokens.css          — Design tokens (colors, fonts, spacing)
+    main.css            — All component styles
   /js
-    api.js            — Fetch helpers
-    nav.js            — Shared header/footer
+    api.js              — Fetch helpers
+    nav.js              — Shared header/footer
     home.js, products.js, product-detail.js, faq.js, industries.js, contact-form.js
 
 /api
-  index.py            — Vercel serverless entry point
+  index.py              — Vercel serverless entry point
 ```
 
 ## Design System

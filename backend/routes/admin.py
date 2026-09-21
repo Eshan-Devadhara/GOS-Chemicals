@@ -87,12 +87,12 @@ def _populate_chemical(chemical, req):
 
     file = req.files.get('image')
     if file and file.filename and allowed_file(file.filename):
-        # Try S3 upload first (production)
-        from s3_upload import upload_to_s3
+        # Try Cloudinary upload first (production)
+        from cloudinary_upload import upload_image
         try:
-            s3_url = upload_to_s3(file, file.filename, file.content_type)
-            if s3_url:
-                chemical.image_url = s3_url
+            cloud_url, public_id = upload_image(file, file.filename)
+            if cloud_url:
+                chemical.image_url = cloud_url
                 return
         except Exception:
             pass  # Fall through to local upload
@@ -102,7 +102,7 @@ def _populate_chemical(chemical, req):
             filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
             filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
-            file.seek(0)  # Reset after S3 attempt
+            file.seek(0)  # Reset after Cloudinary attempt
             file.save(filepath)
             chemical.image_url = f"/static/uploads/{filename}"
         except OSError:
