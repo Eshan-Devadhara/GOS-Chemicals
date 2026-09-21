@@ -87,14 +87,25 @@ def _populate_chemical(chemical, req):
 
     file = req.files.get('image')
     if file and file.filename and allowed_file(file.filename):
+        # Try S3 upload first (production)
+        from s3_upload import upload_to_s3
+        try:
+            s3_url = upload_to_s3(file, file.filename, file.content_type)
+            if s3_url:
+                chemical.image_url = s3_url
+                return
+        except Exception:
+            pass  # Fall through to local upload
+
+        # Fall back to local file storage (development)
         try:
             filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
             filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            file.seek(0)  # Reset after S3 attempt
             file.save(filepath)
             chemical.image_url = f"/static/uploads/{filename}"
         except OSError:
-            from flask import flash
             flash('Image upload is not available in this environment.', 'warning')
 
 

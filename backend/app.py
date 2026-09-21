@@ -1,11 +1,9 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, jsonify
 import bcrypt
 from config import Config
 from extensions import db, login_manager
 from models import AdminUser
-
-import tempfile
 
 
 def create_app():
@@ -32,7 +30,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return AdminUser.query.get(int(user_id))
+        return db.session.get(AdminUser, int(user_id))
 
     # Register blueprints
     from routes.api import api_bp
@@ -44,6 +42,7 @@ def create_app():
 
     # Serve frontend static files
     frontend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'frontend')
+    frontend_dir = os.path.normpath(frontend_dir)
 
     @app.route('/')
     def serve_index():
@@ -56,7 +55,35 @@ def create_app():
         except Exception:
             return send_from_directory(frontend_dir, 'index.html')
 
+    # --- Security Headers ---
+    @app.after_request
+    def set_security_headers(response):
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+        return response
+
+    # --- Error Handlers (production-safe) ---
+    @app.errorhandler(404)
+    def not_found(e):
+        if _is_api_request():
+            return jsonify({'error': 'Not found'}), 404
+        return send_from_directory(frontend_dir, 'index.html'), 404
+
+    @app.errorhandler(500)
+    def internal_error(e):
+        app.logger.error(f'Internal server error: {e}')
+        if _is_api_request():
+            return jsonify({'error': 'Internal server error'}), 500
+        return '<h1>500 — Internal Server Error</h1>', 500
+
     return app
+
+
+def _is_api_request():
+    """Check if the current request is for an API endpoint."""
+    from flask import request
+    return request.path.startswith('/api/')
 
 
 def initialize_database(app):
@@ -69,14 +96,20 @@ def initialize_database(app):
 
         # Create default admin user if none exists
         if AdminUser.query.count() == 0:
+            admin_password = app.config['ADMIN_PASSWORD']
+            if admin_password in ('change-this-password', 'admin123', 'password', ''):
+                app.logger.warning(
+                    'ADMIN_PASSWORD is not set or uses a default value. '
+                    'Set a strong password via the ADMIN_PASSWORD environment variable.'
+                )
             hashed = bcrypt.hashpw(
-                app.config['ADMIN_PASSWORD'].encode('utf-8'),
+                admin_password.encode('utf-8'),
                 bcrypt.gensalt()
             ).decode('utf-8')
             admin = AdminUser(email=app.config['ADMIN_EMAIL'], password_hash=hashed)
             db.session.add(admin)
             db.session.commit()
-            print(f"Default admin user created: {app.config['ADMIN_EMAIL']}")
+            app.logger.info(f"Default admin user created: {app.config['ADMIN_EMAIL']}")
 
     # Ensure uploads directory exists (skip on read-only filesystems like Vercel)
     try:
