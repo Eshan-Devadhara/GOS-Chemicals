@@ -1,5 +1,6 @@
 import os
 import uuid
+from datetime import datetime, timedelta
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required
 from werkzeug.utils import secure_filename
@@ -23,9 +24,11 @@ def dashboard():
                            chemical_count=Chemical.query.count(),
                            industry_count=Industry.query.count(),
                            faq_count=FAQ.query.count(),
-                           submission_count=ContactSubmission.query.count(),
-                           recent_submissions=ContactSubmission.query.order_by(
-                               ContactSubmission.created_at.desc()).limit(5).all())
+                           submission_count=ContactSubmission.query.filter(
+                               ContactSubmission.deleted_at.is_(None)).count(),
+                           recent_submissions=ContactSubmission.query.filter(
+                               ContactSubmission.deleted_at.is_(None)
+                           ).order_by(ContactSubmission.created_at.desc()).limit(5).all())
 
 
 # --- Chemicals CRUD ---
@@ -270,8 +273,66 @@ def settings():
 
 
 # --- Contact Submissions ---
+def _purge_expired_trash():
+    cutoff = datetime.utcnow() - timedelta(days=30)
+    ContactSubmission.query.filter(
+        ContactSubmission.deleted_at.isnot(None),
+        ContactSubmission.deleted_at < cutoff
+    ).delete(synchronize_session=False)
+    db.session.commit()
+
+
 @admin_bp.route('/admin/contact-submissions')
 @login_required
 def contact_submissions():
-    submissions = ContactSubmission.query.order_by(ContactSubmission.created_at.desc()).all()
-    return render_template('admin/contact_submissions.html', submissions=submissions)
+    _purge_expired_trash()
+    submissions = ContactSubmission.query.filter(
+        ContactSubmission.deleted_at.is_(None)
+    ).order_by(ContactSubmission.created_at.desc()).all()
+    trash_submissions = ContactSubmission.query.filter(
+        ContactSubmission.deleted_at.isnot(None)
+    ).order_by(ContactSubmission.deleted_at.desc()).all()
+    return render_template('admin/contact_submissions.html',
+                           submissions=submissions,
+                           trash_submissions=trash_submissions)
+
+
+@admin_bp.route('/admin/contact-submissions/<int:id>/trash', methods=['POST'])
+@login_required
+def contact_submission_trash(id):
+    submission = ContactSubmission.query.get_or_404(id)
+    submission.deleted_at = datetime.utcnow()
+    db.session.commit()
+    flash('Submission moved to Trash.', 'success')
+    return redirect(url_for('admin.contact_submissions'))
+
+
+@admin_bp.route('/admin/contact-submissions/<int:id>/restore', methods=['POST'])
+@login_required
+def contact_submission_restore(id):
+    submission = ContactSubmission.query.get_or_404(id)
+    submission.deleted_at = None
+    db.session.commit()
+    flash('Submission restored from Trash.', 'success')
+    return redirect(url_for('admin.contact_submissions') + '#trash')
+
+
+@admin_bp.route('/admin/contact-submissions/<int:id>/delete', methods=['POST'])
+@login_required
+def contact_submission_delete(id):
+    submission = ContactSubmission.query.get_or_404(id)
+    db.session.delete(submission)
+    db.session.commit()
+    flash('Submission permanently deleted.', 'success')
+    return redirect(url_for('admin.contact_submissions') + '#trash')
+
+
+@admin_bp.route('/admin/contact-submissions/empty-trash', methods=['POST'])
+@login_required
+def contact_submissions_empty_trash():
+    ContactSubmission.query.filter(
+        ContactSubmission.deleted_at.isnot(None)
+    ).delete(synchronize_session=False)
+    db.session.commit()
+    flash('Trash emptied.', 'success')
+    return redirect(url_for('admin.contact_submissions') + '#trash')

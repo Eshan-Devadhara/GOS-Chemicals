@@ -4,24 +4,152 @@
 <div class="admin-header">
     <h1>Contact Submissions</h1>
 </div>
-<table>
-    <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Product</th><th>Specification</th><th>Application</th><th>Quantity</th><th>Packaging</th><th>Destination</th><th>Message</th></tr></thead>
-    <tbody>
-    {% for s in submissions %}
-    <tr>
-        <td>{{ s.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
-        <td>{{ s.name }}</td>
-        <td>{{ s.email }}</td>
-        <td>{{ s.product or '—' }}</td>
-        <td>{{ s.specification or '—' }}</td>
-        <td>{{ s.application or '—' }}</td>
-        <td>{{ s.quantity or '—' }}</td>
-        <td>{{ s.packaging or '—' }}</td>
-        <td>{{ s.destination or '—' }}</td>
-        <td style="max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ s.message or '—' }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-{% if not submissions %}<p style="padding:1rem; color:var(--admin-text-muted);">No submissions yet.</p>{% endif %}
+
+<div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid var(--admin-border); padding-bottom:0.75rem;">
+    <button id="tab-active-btn" type="button" class="btn btn-primary" onclick="showTab('active')">
+        Active Submissions ({{ submissions|length }})
+    </button>
+    <button id="tab-trash-btn" type="button" class="btn btn-sm" style="background:#f0f0f0; color:var(--admin-text);" onclick="showTab('trash')">
+        Trash Can ({{ trash_submissions|length }})
+    </button>
+</div>
+
+<!-- Active Submissions Section -->
+<div id="section-active">
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Product</th>
+                <th>Specification</th>
+                <th>Application</th>
+                <th>Quantity</th>
+                <th>Packaging</th>
+                <th>Destination</th>
+                <th>Message</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for s in submissions %}
+        <tr>
+            <td>{{ s.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.email }}</td>
+            <td>{{ s.product or '—' }}</td>
+            <td>{{ s.specification or '—' }}</td>
+            <td>{{ s.application or '—' }}</td>
+            <td>{{ s.quantity or '—' }}</td>
+            <td>{{ s.packaging or '—' }}</td>
+            <td>{{ s.destination or '—' }}</td>
+            <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ s.message or '—' }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('admin.contact_submission_trash', id=s.id) }}" style="display:inline;" onsubmit="return confirm('Move this submission to Trash?');">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if not submissions %}<p style="padding:1rem; color:var(--admin-text-muted);">No active submissions.</p>{% endif %}
+</div>
+
+<!-- Trash Can Section -->
+<div id="section-trash" style="display:none;">
+    <div style="background:#fff3cd; color:#856404; border:1px solid #ffeeba; padding:0.75rem 1rem; border-radius:var(--admin-radius); margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+        <span>Submissions in Trash are automatically deleted after 30 days.</span>
+        {% if trash_submissions %}
+        <form method="POST" action="{{ url_for('admin.contact_submissions_empty_trash') }}" onsubmit="return confirm('Permanently delete all items in Trash? This cannot be undone.');" style="margin:0;">
+            <button type="submit" class="btn btn-danger btn-sm">Empty Trash</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Product</th>
+                <th>Specification</th>
+                <th>Application</th>
+                <th>Quantity</th>
+                <th>Packaging</th>
+                <th>Destination</th>
+                <th>Message</th>
+                <th>Deleted On</th>
+                <th>Auto-Purge</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for s in trash_submissions %}
+        <tr>
+            <td>{{ s.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.email }}</td>
+            <td>{{ s.product or '—' }}</td>
+            <td>{{ s.specification or '—' }}</td>
+            <td>{{ s.application or '—' }}</td>
+            <td>{{ s.quantity or '—' }}</td>
+            <td>{{ s.packaging or '—' }}</td>
+            <td>{{ s.destination or '—' }}</td>
+            <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ s.message or '—' }}</td>
+            <td>{{ s.deleted_at.strftime('%Y-%m-%d %H:%M') if s.deleted_at else '—' }}</td>
+            <td><span style="color:var(--admin-danger); font-weight:600;">{{ s.days_until_purge }} day{% if s.days_until_purge != 1 %}s{% endif %} left</span></td>
+            <td style="white-space:nowrap;">
+                <form method="POST" action="{{ url_for('admin.contact_submission_restore', id=s.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-primary btn-sm">Restore</button>
+                </form>
+                <form method="POST" action="{{ url_for('admin.contact_submission_delete', id=s.id) }}" style="display:inline; margin-left:0.25rem;" onsubmit="return confirm('Permanently delete this submission? This cannot be undone.');">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete Permanently</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if not trash_submissions %}<p style="padding:1rem; color:var(--admin-text-muted);">Trash is empty.</p>{% endif %}
+</div>
+
+<script>
+function showTab(tab) {
+    const activeSection = document.getElementById('section-active');
+    const trashSection = document.getElementById('section-trash');
+    const activeBtn = document.getElementById('tab-active-btn');
+    const trashBtn = document.getElementById('tab-trash-btn');
+
+    if (tab === 'trash') {
+        activeSection.style.display = 'none';
+        trashSection.style.display = 'block';
+        trashBtn.className = 'btn btn-primary';
+        trashBtn.style.background = '';
+        trashBtn.style.color = '';
+        activeBtn.className = 'btn btn-sm';
+        activeBtn.style.background = '#f0f0f0';
+        activeBtn.style.color = 'var(--admin-text)';
+        window.location.hash = 'trash';
+    } else {
+        activeSection.style.display = 'block';
+        trashSection.style.display = 'none';
+        activeBtn.className = 'btn btn-primary';
+        activeBtn.style.background = '';
+        activeBtn.style.color = '';
+        trashBtn.className = 'btn btn-sm';
+        trashBtn.style.background = '#f0f0f0';
+        trashBtn.style.color = 'var(--admin-text)';
+        if (window.location.hash === '#trash') {
+            history.replaceState(null, null, window.location.pathname);
+        }
+    }
+}
+
+if (window.location.hash === '#trash') {
+    showTab('trash');
+}
+</script>
 {% endblock %}

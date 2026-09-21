@@ -109,6 +109,13 @@ def initialize_database(app):
                     db.session.execute(text('ALTER TABLE chemical ADD COLUMN cloudinary_public_id VARCHAR(300)'))
                     db.session.commit()
                     app.logger.info("Migrated schema: added cloudinary_public_id to chemical table")
+                
+                # Idempotent schema migration for deleted_at on contact_submission
+                cs_columns = [col['name'] for col in inspector.get_columns('contact_submission')]
+                if 'deleted_at' not in cs_columns:
+                    db.session.execute(text('ALTER TABLE contact_submission ADD COLUMN deleted_at TIMESTAMP'))
+                    db.session.commit()
+                    app.logger.info("Migrated schema: added deleted_at to contact_submission table")
             except Exception as e:
                 app.logger.error(f"Schema migration error: {e}", exc_info=True)
 

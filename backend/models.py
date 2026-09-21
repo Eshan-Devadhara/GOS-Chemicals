@@ -1,6 +1,6 @@
 from extensions import db
 from flask_login import UserMixin
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class Chemical(db.Model):
@@ -57,6 +57,15 @@ class ContactSubmission(db.Model):
     email = db.Column(db.String(200))
     message = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    deleted_at = db.Column(db.DateTime, nullable=True, default=None)
+
+    @property
+    def days_until_purge(self):
+        if not self.deleted_at:
+            return 30
+        expires_at = self.deleted_at + timedelta(days=30)
+        remaining = (expires_at - datetime.utcnow()).total_seconds()
+        return max(0, int(remaining // 86400) + (1 if remaining % 86400 > 0 else 0))
 
 
 class CustomCategory(db.Model):
