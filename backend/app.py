@@ -9,19 +9,22 @@ import tempfile
 
 
 def create_app():
-    # Use explicitly /tmp/instance for Vercel, and tempfile for local
-    instance_path = '/tmp/instance' if os.environ.get('VERCEL') else os.path.join(tempfile.gettempdir(), 'instance')
-    
-    app = Flask(__name__,
-                static_folder='static',
-                template_folder='templates',
-                instance_path=instance_path)
-    
-    try:
-        os.makedirs(app.instance_path, exist_ok=True)
-    except OSError:
-        pass
-    
+    instance_path = '/tmp/gos_chemicals_instance' if os.getenv('VERCEL') else None
+
+    if instance_path:
+        app = Flask(
+            __name__,
+            static_folder='static',
+            template_folder='templates',
+            instance_path=instance_path
+        )
+    else:
+        app = Flask(
+            __name__,
+            static_folder='static',
+            template_folder='templates'
+        )
+
     app.config.from_object(Config)
 
     db.init_app(app)
