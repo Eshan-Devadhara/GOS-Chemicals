@@ -64,6 +64,9 @@ def chemical_edit(id):
 @login_required
 def chemical_delete(id):
     chemical = Chemical.query.get_or_404(id)
+    if getattr(chemical, 'cloudinary_public_id', None):
+        from cloudinary_upload import delete_image
+        delete_image(chemical.cloudinary_public_id)
     db.session.delete(chemical)
     db.session.commit()
     flash('Chemical deleted.', 'success')
@@ -88,11 +91,14 @@ def _populate_chemical(chemical, req):
     file = req.files.get('image')
     if file and file.filename and allowed_file(file.filename):
         # Try Cloudinary upload first (production)
-        from cloudinary_upload import upload_image
+        from cloudinary_upload import upload_image, delete_image
         try:
             cloud_url, public_id = upload_image(file, file.filename)
             if cloud_url:
+                if getattr(chemical, 'cloudinary_public_id', None):
+                    delete_image(chemical.cloudinary_public_id)
                 chemical.image_url = cloud_url
+                chemical.cloudinary_public_id = public_id
                 return
         except Exception:
             pass  # Fall through to local upload
@@ -104,6 +110,11 @@ def _populate_chemical(chemical, req):
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             file.seek(0)  # Reset after Cloudinary attempt
             file.save(filepath)
+            
+            if getattr(chemical, 'cloudinary_public_id', None):
+                delete_image(chemical.cloudinary_public_id)
+                chemical.cloudinary_public_id = None
+                
             chemical.image_url = f"/static/uploads/{filename}"
         except OSError:
             flash('Image upload is not available in this environment.', 'warning')

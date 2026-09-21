@@ -14,6 +14,7 @@ class Chemical(db.Model):
     applications = db.Column(db.Text)
     packaging = db.Column(db.Text)
     image_url = db.Column(db.String(300))
+    cloudinary_public_id = db.Column(db.String(300))
     cta_label = db.Column(db.String(120))
     seo_title = db.Column(db.String(200))
     seo_description = db.Column(db.Text)

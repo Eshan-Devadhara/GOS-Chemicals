@@ -57,6 +57,12 @@ class Config:
     ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@example.com')
     ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'change-this-password')
 
+    if _is_production():
+        if ADMIN_EMAIL == 'admin@example.com' or not ADMIN_EMAIL:
+            raise RuntimeError("ADMIN_EMAIL environment variable must be set in production.")
+        if ADMIN_PASSWORD == 'change-this-password' or not ADMIN_PASSWORD:
+            raise RuntimeError("ADMIN_PASSWORD environment variable must be set to a strong password in production.")
+
     # --- Session / Cookies ---
     SESSION_COOKIE_SECURE = _is_production()
     SESSION_COOKIE_HTTPONLY = True
