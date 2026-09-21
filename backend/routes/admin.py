@@ -5,6 +5,7 @@ from flask_login import login_required
 from werkzeug.utils import secure_filename
 from extensions import db
 from models import Chemical, Industry, FAQ, SiteSetting, CustomCategory, ContactSubmission
+from cloudinary_upload import upload_image, delete_image, _get_cloudinary_config
 
 admin_bp = Blueprint('admin', __name__)
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp'}
@@ -64,8 +65,7 @@ def chemical_edit(id):
 @login_required
 def chemical_delete(id):
     chemical = Chemical.query.get_or_404(id)
-    if getattr(chemical, 'cloudinary_public_id', None):
-        from cloudinary_upload import delete_image
+    if chemical.cloudinary_public_id:
         delete_image(chemical.cloudinary_public_id)
     db.session.delete(chemical)
     db.session.commit()
@@ -90,18 +90,26 @@ def _populate_chemical(chemical, req):
 
     file = req.files.get('image')
     if file and file.filename and allowed_file(file.filename):
-        # Try Cloudinary upload first (production)
-        from cloudinary_upload import upload_image, delete_image
-        try:
-            cloud_url, public_id = upload_image(file, file.filename)
-            if cloud_url:
-                if getattr(chemical, 'cloudinary_public_id', None):
-                    delete_image(chemical.cloudinary_public_id)
-                chemical.image_url = cloud_url
-                chemical.cloudinary_public_id = public_id
-                return
-        except Exception:
-            pass  # Fall through to local upload
+        old_public_id = chemical.cloudinary_public_id
+        is_cloudinary_configured = current_app.config.get('USE_CLOUDINARY') or _get_cloudinary_config()
+
+        if is_cloudinary_configured:
+            try:
+                cloud_url, public_id = upload_image(file, file.filename)
+                if cloud_url and public_id:
+                    chemical.image_url = cloud_url
+                    chemical.cloudinary_public_id = public_id
+                    if old_public_id:
+                        delete_image(old_public_id)
+                    return
+                else:
+                    raise Exception("Cloudinary upload failed: no URL or public ID returned")
+            except Exception as e:
+                current_app.logger.error(f"Cloudinary upload failed: {e}")
+                is_prod = bool(os.getenv('VERCEL') or os.getenv('PRODUCTION'))
+                if is_prod:
+                    flash('Image upload failed.', 'error')
+                    return
 
         # Fall back to local file storage (development)
         try:
@@ -110,12 +118,11 @@ def _populate_chemical(chemical, req):
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             file.seek(0)  # Reset after Cloudinary attempt
             file.save(filepath)
-            
-            if getattr(chemical, 'cloudinary_public_id', None):
-                delete_image(chemical.cloudinary_public_id)
-                chemical.cloudinary_public_id = None
-                
+
             chemical.image_url = f"/static/uploads/{filename}"
+            chemical.cloudinary_public_id = None
+            if old_public_id and is_cloudinary_configured:
+                delete_image(old_public_id)
         except OSError:
             flash('Image upload is not available in this environment.', 'warning')
 

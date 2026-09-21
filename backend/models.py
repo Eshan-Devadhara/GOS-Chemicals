@@ -70,7 +70,4 @@ class AdminUser(db.Model, UserMixin):
     email = db.Column(db.String(200), unique=True, nullable=False)
     password_hash = db.Column(db.String(300), nullable=False)
 
-    def __init__(self, email: str = "", password_hash: str = "", **kwargs):
-        super().__init__(email=email, password_hash=password_hash, **kwargs)
-
 
