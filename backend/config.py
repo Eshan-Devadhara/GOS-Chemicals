@@ -27,13 +27,7 @@ def _is_production():
 
 class Config:
     # --- Security ---
-    SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
-    # Fail loudly in production if SECRET_KEY is not set
-    if _is_production() and SECRET_KEY == 'dev-secret-key-change-in-production':
-        raise RuntimeError(
-            'SECRET_KEY environment variable must be set in production. '
-            'Generate one with: python -c "import secrets; print(secrets.token_hex(32))"'
-        )
+    # See below for production secrets
 
     # --- Database ---
     SQLALCHEMY_DATABASE_URI = _resolve_database_uri()
@@ -53,15 +47,22 @@ class Config:
     CLOUDINARY_API_SECRET = os.getenv('CLOUDINARY_API_SECRET')
     USE_CLOUDINARY = bool(CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET)
 
-    # --- Admin ---
-    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@example.com')
-    ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'change-this-password')
-
     if _is_production():
-        if ADMIN_EMAIL == 'admin@example.com' or not ADMIN_EMAIL:
+        SECRET_KEY = os.getenv('SECRET_KEY')
+        if not SECRET_KEY or SECRET_KEY == 'dev-secret-key-change-in-production':
+            raise RuntimeError("SECRET_KEY environment variable must be set in production.")
+            
+        ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
+        if not ADMIN_EMAIL or ADMIN_EMAIL == 'admin@example.com':
             raise RuntimeError("ADMIN_EMAIL environment variable must be set in production.")
-        if ADMIN_PASSWORD == 'change-this-password' or not ADMIN_PASSWORD:
+            
+        ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
+        if not ADMIN_PASSWORD or ADMIN_PASSWORD == 'change-this-password':
             raise RuntimeError("ADMIN_PASSWORD environment variable must be set to a strong password in production.")
+    else:
+        SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+        ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@example.com')
+        ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'change-this-password')
 
     # --- Session / Cookies ---
     SESSION_COOKIE_SECURE = _is_production()
