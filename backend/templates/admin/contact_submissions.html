@@ -2,460 +2,460 @@
 {% block title %}Contact Submissions{% endblock %}
 {% block content %}
 <style>
-/* Header & Controls Toolbar */
-.submissions-page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
+    /* Header & Controls Toolbar */
+    .submissions-page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
 
-.submissions-page-header h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--admin-primary);
-    margin: 0;
-}
+    .submissions-page-header h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--admin-primary);
+        margin: 0;
+    }
 
-.submissions-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--admin-border);
-}
+    .submissions-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid var(--admin-border);
+    }
 
-.search-box-wrap {
-    flex: 1 1 260px;
-    max-width: 420px;
-    position: relative;
-}
+    .search-box-wrap {
+        flex: 1 1 260px;
+        max-width: 420px;
+        position: relative;
+    }
 
-.search-box-wrap input {
-    width: 100%;
-    padding: 0.55rem 0.85rem 0.55rem 2.2rem;
-    border: 1px solid var(--admin-border);
-    border-radius: var(--admin-radius);
-    font-size: 0.875rem;
-    background: #fff;
-    outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    font-family: inherit;
-}
+    .search-box-wrap input {
+        width: 100%;
+        padding: 0.55rem 0.85rem 0.55rem 2.2rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius);
+        font-size: 0.875rem;
+        background: #fff;
+        outline: none;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        font-family: inherit;
+    }
 
-.search-box-wrap input:focus {
-    border-color: var(--admin-primary);
-    box-shadow: 0 0 0 3px rgba(31, 58, 52, 0.12);
-}
+    .search-box-wrap input:focus {
+        border-color: var(--admin-primary);
+        box-shadow: 0 0 0 3px rgba(31, 58, 52, 0.12);
+    }
 
-.search-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--admin-text-muted);
-    pointer-events: none;
-    font-size: 0.9rem;
-    line-height: 1;
-}
+    .search-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--admin-text-muted);
+        pointer-events: none;
+        font-size: 0.9rem;
+        line-height: 1;
+    }
 
-.toolbar-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-}
+    .toolbar-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
 
-.filter-group {
-    display: flex;
-    background: #e9ecef;
-    padding: 3px;
-    border-radius: var(--admin-radius);
-    gap: 2px;
-}
+    .filter-group {
+        display: flex;
+        background: #e9ecef;
+        padding: 3px;
+        border-radius: var(--admin-radius);
+        gap: 2px;
+    }
 
-.filter-btn {
-    padding: 0.35rem 0.85rem;
-    border: none;
-    background: transparent;
-    color: var(--admin-text-muted);
-    font-size: 0.825rem;
-    font-weight: 500;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-}
+    .filter-btn {
+        padding: 0.35rem 0.85rem;
+        border: none;
+        background: transparent;
+        color: var(--admin-text-muted);
+        font-size: 0.825rem;
+        font-weight: 500;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+    }
 
-.filter-btn:hover {
-    color: var(--admin-text);
-}
+    .filter-btn:hover {
+        color: var(--admin-text);
+    }
 
-.filter-btn.active {
-    background: #fff;
-    color: var(--admin-primary);
-    font-weight: 600;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-}
+    .filter-btn.active {
+        background: #fff;
+        color: var(--admin-primary);
+        font-weight: 600;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
 
-.sort-select {
-    padding: 0.45rem 0.75rem;
-    border: 1px solid var(--admin-border);
-    border-radius: var(--admin-radius);
-    background: #fff;
-    font-size: 0.825rem;
-    color: var(--admin-text);
-    cursor: pointer;
-    font-family: inherit;
-    outline: none;
-}
+    .sort-select {
+        padding: 0.45rem 0.75rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius);
+        background: #fff;
+        font-size: 0.825rem;
+        color: var(--admin-text);
+        cursor: pointer;
+        font-family: inherit;
+        outline: none;
+    }
 
-.sort-select:focus {
-    border-color: var(--admin-primary);
-}
+    .sort-select:focus {
+        border-color: var(--admin-primary);
+    }
 
-/* Archived / Trash Notice Banner */
-.trash-alert-banner {
-    background: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
-    border-radius: var(--admin-radius);
-    padding: 0.75rem 1rem;
-    margin-bottom: 1.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.875rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
+    /* Archived / Trash Notice Banner */
+    .trash-alert-banner {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+        border-radius: var(--admin-radius);
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.875rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
 
-/* Cards Grid */
-.submissions-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
-    gap: 1.25rem;
-}
-
-@media (max-width: 640px) {
+    /* Cards Grid */
     .submissions-cards-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
+        gap: 1.25rem;
     }
-}
 
-.submission-card {
-    background: var(--admin-surface);
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-}
+    @media (max-width: 640px) {
+        .submissions-cards-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 
-.submission-card:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
+    .submission-card {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: 8px;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
 
-.card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 0.35rem;
-}
+    .submission-card:hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
 
-.card-product-title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--admin-primary);
-    line-height: 1.3;
-    word-break: break-word;
-}
+    .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 0.35rem;
+    }
 
-.card-date-time {
-    font-size: 0.8rem;
-    color: var(--admin-text-muted);
-    margin-top: 0.15rem;
-}
+    .card-product-title {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: var(--admin-primary);
+        line-height: 1.3;
+        word-break: break-word;
+    }
 
-.card-sender-info {
-    font-size: 0.875rem;
-    color: var(--admin-text);
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid #f2f2f2;
-}
+    .card-date-time {
+        font-size: 0.8rem;
+        color: var(--admin-text-muted);
+        margin-top: 0.15rem;
+    }
 
-.card-sender-info a {
-    color: var(--admin-primary);
-    text-decoration: none;
-}
+    .card-sender-info {
+        font-size: 0.875rem;
+        color: var(--admin-text);
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 1px solid #f2f2f2;
+    }
 
-.card-sender-info a:hover {
-    text-decoration: underline;
-}
+    .card-sender-info a {
+        color: var(--admin-primary);
+        text-decoration: none;
+    }
 
-/* Status Badges */
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.2rem 0.55rem;
-    border-radius: 9999px;
-    font-size: 0.725rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-}
+    .card-sender-info a:hover {
+        text-decoration: underline;
+    }
 
-.status-badge-active {
-    background: #eafaf1;
-    color: #27ae60;
-    border: 1px solid #a3dfbf;
-}
+    /* Status Badges */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.55rem;
+        border-radius: 9999px;
+        font-size: 0.725rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+    }
 
-.status-badge-archived {
-    background: #fdedec;
-    color: #c0392b;
-    border: 1px solid #f5b7b1;
-}
+    .status-badge-active {
+        background: #eafaf1;
+        color: #27ae60;
+        border: 1px solid #a3dfbf;
+    }
 
-/* Card Two-Column Info Layout */
-.card-fields-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.65rem 1rem;
-    margin-bottom: 0.75rem;
-}
+    .status-badge-archived {
+        background: #fdedec;
+        color: #c0392b;
+        border: 1px solid #f5b7b1;
+    }
 
-@media (max-width: 480px) {
+    /* Card Two-Column Info Layout */
     .card-fields-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.65rem 1rem;
+        margin-bottom: 0.75rem;
     }
-}
 
-.card-field-cell {
-    min-width: 0;
-}
+    @media (max-width: 480px) {
+        .card-fields-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 
-.field-label {
-    display: block;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: var(--admin-text-muted);
-    letter-spacing: 0.04em;
-    margin-bottom: 0.15rem;
-}
+    .card-field-cell {
+        min-width: 0;
+    }
 
-.field-value {
-    font-size: 0.875rem;
-    color: var(--admin-text);
-    word-break: break-word;
-}
+    .field-label {
+        display: block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: var(--admin-text-muted);
+        letter-spacing: 0.04em;
+        margin-bottom: 0.15rem;
+    }
 
-.field-value-truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: block;
-}
+    .field-value {
+        font-size: 0.875rem;
+        color: var(--admin-text);
+        word-break: break-word;
+    }
 
-/* Message Preview */
-.card-message-preview {
-    background: #fbfbfb;
-    border: 1px solid #f0f0f0;
-    border-radius: 6px;
-    padding: 0.55rem 0.75rem;
-    margin-top: 0.25rem;
-    margin-bottom: 0.75rem;
-}
+    .field-value-truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+    }
 
-.message-preview-content {
-    font-size: 0.825rem;
-    color: #4b5563;
-    line-height: 1.45;
-    margin-top: 0.2rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    word-break: break-word;
-}
+    /* Message Preview */
+    .card-message-preview {
+        background: #fbfbfb;
+        border: 1px solid #f0f0f0;
+        border-radius: 6px;
+        padding: 0.55rem 0.75rem;
+        margin-top: 0.25rem;
+        margin-bottom: 0.75rem;
+    }
 
-/* Card Action Footer */
-.card-action-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid #f2f2f2;
-    margin-top: auto;
-    flex-wrap: wrap;
-}
+    .message-preview-content {
+        font-size: 0.825rem;
+        color: #4b5563;
+        line-height: 1.45;
+        margin-top: 0.2rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        word-break: break-word;
+    }
 
-.btn-outline {
-    background: #fff;
-    border: 1px solid var(--admin-border);
-    color: var(--admin-text);
-}
+    /* Card Action Footer */
+    .card-action-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #f2f2f2;
+        margin-top: auto;
+        flex-wrap: wrap;
+    }
 
-.btn-outline:hover {
-    background: #f8f9fa;
-    border-color: var(--admin-primary);
-    color: var(--admin-primary);
-}
+    .btn-outline {
+        background: #fff;
+        border: 1px solid var(--admin-border);
+        color: var(--admin-text);
+    }
 
-/* Empty State */
-.submissions-empty-state {
-    text-align: center;
-    padding: 3rem 1.5rem;
-    background: var(--admin-surface);
-    border: 1px dashed var(--admin-border);
-    border-radius: 8px;
-    color: var(--admin-text-muted);
-    font-size: 0.95rem;
-}
+    .btn-outline:hover {
+        background: #f8f9fa;
+        border-color: var(--admin-primary);
+        color: var(--admin-primary);
+    }
 
-/* Modal Styling */
-.details-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(2px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-}
+    /* Empty State */
+    .submissions-empty-state {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        background: var(--admin-surface);
+        border: 1px dashed var(--admin-border);
+        border-radius: 8px;
+        color: var(--admin-text-muted);
+        font-size: 0.95rem;
+    }
 
-.details-modal-overlay.modal-active {
-    opacity: 1;
-    pointer-events: auto;
-}
+    /* Modal Styling */
+    .details-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(2px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+    }
 
-.details-modal-container {
-    background: #ffffff;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 620px;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    transform: scale(0.96);
-    transition: transform 0.2s ease;
-}
+    .details-modal-overlay.modal-active {
+        opacity: 1;
+        pointer-events: auto;
+    }
 
-.details-modal-overlay.modal-active .details-modal-container {
-    transform: scale(1);
-}
+    .details-modal-container {
+        background: #ffffff;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 620px;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        transform: scale(0.96);
+        transition: transform 0.2s ease;
+    }
 
-.details-modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--admin-border);
-}
+    .details-modal-overlay.modal-active .details-modal-container {
+        transform: scale(1);
+    }
 
-.details-modal-header h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--admin-primary);
-    margin: 0;
-}
+    .details-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+    }
 
-.details-modal-close {
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    line-height: 1;
-    color: var(--admin-text-muted);
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-}
+    .details-modal-header h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-primary);
+        margin: 0;
+    }
 
-.details-modal-close:hover {
-    color: var(--admin-text);
-    background: #f1f5f9;
-}
+    .details-modal-close {
+        background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        line-height: 1;
+        color: var(--admin-text-muted);
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+    }
 
-.details-modal-body {
-    padding: 1.5rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
+    .details-modal-close:hover {
+        color: var(--admin-text);
+        background: #f1f5f9;
+    }
 
-.modal-info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
+    .details-modal-body {
+        padding: 1.5rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
 
-@media (max-width: 480px) {
     .modal-info-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
     }
-}
 
-.modal-item-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: var(--admin-text-muted);
-    letter-spacing: 0.04em;
-    margin-bottom: 0.2rem;
-}
+    @media (max-width: 480px) {
+        .modal-info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 
-.modal-item-value {
-    font-size: 0.95rem;
-    color: var(--admin-text);
-    word-break: break-word;
-}
+    .modal-item-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: var(--admin-text-muted);
+        letter-spacing: 0.04em;
+        margin-bottom: 0.2rem;
+    }
 
-.modal-message-panel {
-    background: #f8f9fa;
-    border: 1px solid var(--admin-border);
-    border-radius: 6px;
-    padding: 1rem;
-    white-space: pre-wrap;
-    font-size: 0.9rem;
-    color: var(--admin-text);
-    line-height: 1.6;
-    max-height: 250px;
-    overflow-y: auto;
-}
+    .modal-item-value {
+        font-size: 0.95rem;
+        color: var(--admin-text);
+        word-break: break-word;
+    }
 
-.details-modal-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
-    border-top: 1px solid var(--admin-border);
-    background: #fafafa;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
+    .modal-message-panel {
+        background: #f8f9fa;
+        border: 1px solid var(--admin-border);
+        border-radius: 6px;
+        padding: 1rem;
+        white-space: pre-wrap;
+        font-size: 0.9rem;
+        color: var(--admin-text);
+        line-height: 1.6;
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .details-modal-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid var(--admin-border);
+        background: #fafafa;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
 </style>
 
 <!-- Page Header -->
@@ -467,7 +467,8 @@
 <div class="submissions-toolbar">
     <div class="search-box-wrap">
         <span class="search-icon">🔍</span>
-        <input type="search" id="submission-search" placeholder="Search by product, name, email, destination..." aria-label="Search submissions" oninput="handleSearch(this.value)">
+        <input type="search" id="submission-search" placeholder="Search by product, name, email, destination..."
+            aria-label="Search submissions" oninput="handleSearch(this.value)">
     </div>
 
     <div class="toolbar-controls">
@@ -479,11 +480,12 @@
                 Active (<span id="count-active">{{ submissions|length }}</span>)
             </button>
             <button type="button" class="filter-btn" id="filter-archived" onclick="applyFilter('archived')">
-                Archived (<span id="count-archived">{{ trash_submissions|length }}</span>)
+                Trash (<span id="count-archived">{{ trash_submissions|length }}</span>)
             </button>
         </div>
 
-        <select id="submission-sort" class="sort-select" onchange="handleSort(this.value)" aria-label="Sort submissions">
+        <select id="submission-sort" class="sort-select" onchange="handleSort(this.value)"
+            aria-label="Sort submissions">
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
         </select>
@@ -492,9 +494,12 @@
 
 <!-- Trash Notice Banner (shown when Archived filter is active) -->
 <div id="trash-notice-banner" class="trash-alert-banner" style="display:none;">
-    <span>⚠️ <strong>Archived Submissions:</strong> Items in trash are automatically and permanently deleted after 30 days.</span>
+    <span>⚠️ <strong>Archived Submissions:</strong> Items in trash are automatically and permanently deleted after 30
+        days.</span>
     {% if trash_submissions %}
-    <form method="POST" action="{{ url_for('admin.contact_submissions_empty_trash') }}" onsubmit="return confirm('Permanently delete all archived submissions? This cannot be undone.');" style="margin:0;">
+    <form method="POST" action="{{ url_for('admin.contact_submissions_empty_trash') }}"
+        onsubmit="return confirm('Permanently delete all archived submissions? This cannot be undone.');"
+        style="margin:0;">
         <button type="submit" class="btn btn-danger btn-sm">Empty Trash</button>
     </form>
     {% endif %}
@@ -504,12 +509,9 @@
 <div class="submissions-cards-grid" id="submissions-cards-grid">
     {# Active Submissions #}
     {% for s in submissions %}
-    <div class="submission-card"
-         id="card-{{ s.id }}"
-         data-id="{{ s.id }}"
-         data-status="active"
-         data-timestamp="{{ s.created_at.timestamp() }}"
-         data-search="{{ (s.product or '') ~ ' ' ~ (s.name or '') ~ ' ' ~ (s.email or '') ~ ' ' ~ (s.destination or '') ~ ' ' ~ (s.specification or '') ~ ' ' ~ (s.application or '') ~ ' ' ~ (s.quantity or '') ~ ' ' ~ (s.packaging or '') ~ ' ' ~ (s.message or '') }}">
+    <div class="submission-card" id="card-{{ s.id }}" data-id="{{ s.id }}" data-status="active"
+        data-timestamp="{{ s.created_at.timestamp() }}"
+        data-search="{{ (s.product or '') ~ ' ' ~ (s.name or '') ~ ' ' ~ (s.email or '') ~ ' ' ~ (s.destination or '') ~ ' ' ~ (s.specification or '') ~ ' ' ~ (s.application or '') ~ ' ' ~ (s.quantity or '') ~ ' ' ~ (s.packaging or '') ~ ' ' ~ (s.message or '') }}">
         <div>
             <div class="card-top">
                 <div>
@@ -528,27 +530,33 @@
             <div class="card-fields-grid">
                 <div class="card-field-cell">
                     <span class="field-label">Product</span>
-                    <span class="field-value field-value-truncate" title="{{ s.product or '—' }}">{{ s.product or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.product or '—' }}">{{ s.product or '—'
+                        }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Specification</span>
-                    <span class="field-value field-value-truncate" title="{{ s.specification or '—' }}">{{ s.specification or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.specification or '—' }}">{{
+                        s.specification or '—' }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Application</span>
-                    <span class="field-value field-value-truncate" title="{{ s.application or '—' }}">{{ s.application or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.application or '—' }}">{{ s.application
+                        or '—' }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Quantity</span>
-                    <span class="field-value field-value-truncate" title="{{ s.quantity or '—' }}">{{ s.quantity or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.quantity or '—' }}">{{ s.quantity or '—'
+                        }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Packaging</span>
-                    <span class="field-value field-value-truncate" title="{{ s.packaging or '—' }}">{{ s.packaging or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.packaging or '—' }}">{{ s.packaging or
+                        '—' }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Destination</span>
-                    <span class="field-value field-value-truncate" title="{{ s.destination or '—' }}">{{ s.destination or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.destination or '—' }}">{{ s.destination
+                        or '—' }}</span>
                 </div>
             </div>
 
@@ -559,9 +567,11 @@
         </div>
 
         <div class="card-action-footer">
-            <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal({{ s.id }})">View Details</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal({{ s.id }})">View
+                Details</button>
             <div>
-                <form method="POST" action="{{ url_for('admin.contact_submission_trash', id=s.id) }}" style="display:inline;" onsubmit="return confirm('Move this submission to Trash?');">
+                <form method="POST" action="{{ url_for('admin.contact_submission_trash', id=s.id) }}"
+                    style="display:inline;" onsubmit="return confirm('Move this submission to Trash?');">
                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                 </form>
             </div>
@@ -592,12 +602,9 @@
 
     {# Archived / Trashed Submissions #}
     {% for s in trash_submissions %}
-    <div class="submission-card"
-         id="card-{{ s.id }}"
-         data-id="{{ s.id }}"
-         data-status="archived"
-         data-timestamp="{{ s.created_at.timestamp() }}"
-         data-search="{{ (s.product or '') ~ ' ' ~ (s.name or '') ~ ' ' ~ (s.email or '') ~ ' ' ~ (s.destination or '') ~ ' ' ~ (s.specification or '') ~ ' ' ~ (s.application or '') ~ ' ' ~ (s.quantity or '') ~ ' ' ~ (s.packaging or '') ~ ' ' ~ (s.message or '') }}">
+    <div class="submission-card" id="card-{{ s.id }}" data-id="{{ s.id }}" data-status="archived"
+        data-timestamp="{{ s.created_at.timestamp() }}"
+        data-search="{{ (s.product or '') ~ ' ' ~ (s.name or '') ~ ' ' ~ (s.email or '') ~ ' ' ~ (s.destination or '') ~ ' ' ~ (s.specification or '') ~ ' ' ~ (s.application or '') ~ ' ' ~ (s.quantity or '') ~ ' ' ~ (s.packaging or '') ~ ' ' ~ (s.message or '') }}">
         <div>
             <div class="card-top">
                 <div>
@@ -605,7 +612,9 @@
                     <div class="card-date-time">{{ s.created_at.strftime('%d %b %Y · %H:%M') }}</div>
                 </div>
                 <div>
-                    <span class="status-badge status-badge-archived" title="Automatically purged in {{ s.days_until_purge }} days">Archived · {{ s.days_until_purge }}d left</span>
+                    <span class="status-badge status-badge-archived"
+                        title="Automatically purged in {{ s.days_until_purge }} days">Archived · {{ s.days_until_purge
+                        }}d left</span>
                 </div>
             </div>
 
@@ -616,27 +625,33 @@
             <div class="card-fields-grid">
                 <div class="card-field-cell">
                     <span class="field-label">Product</span>
-                    <span class="field-value field-value-truncate" title="{{ s.product or '—' }}">{{ s.product or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.product or '—' }}">{{ s.product or '—'
+                        }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Specification</span>
-                    <span class="field-value field-value-truncate" title="{{ s.specification or '—' }}">{{ s.specification or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.specification or '—' }}">{{
+                        s.specification or '—' }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Application</span>
-                    <span class="field-value field-value-truncate" title="{{ s.application or '—' }}">{{ s.application or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.application or '—' }}">{{ s.application
+                        or '—' }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Quantity</span>
-                    <span class="field-value field-value-truncate" title="{{ s.quantity or '—' }}">{{ s.quantity or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.quantity or '—' }}">{{ s.quantity or '—'
+                        }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Packaging</span>
-                    <span class="field-value field-value-truncate" title="{{ s.packaging or '—' }}">{{ s.packaging or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.packaging or '—' }}">{{ s.packaging or
+                        '—' }}</span>
                 </div>
                 <div class="card-field-cell">
                     <span class="field-label">Destination</span>
-                    <span class="field-value field-value-truncate" title="{{ s.destination or '—' }}">{{ s.destination or '—' }}</span>
+                    <span class="field-value field-value-truncate" title="{{ s.destination or '—' }}">{{ s.destination
+                        or '—' }}</span>
                 </div>
             </div>
 
@@ -647,12 +662,16 @@
         </div>
 
         <div class="card-action-footer">
-            <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal({{ s.id }})">View Details</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal({{ s.id }})">View
+                Details</button>
             <div style="display:flex; gap:0.35rem;">
-                <form method="POST" action="{{ url_for('admin.contact_submission_restore', id=s.id) }}" style="display:inline;">
+                <form method="POST" action="{{ url_for('admin.contact_submission_restore', id=s.id) }}"
+                    style="display:inline;">
                     <button type="submit" class="btn btn-primary btn-sm">Restore</button>
                 </form>
-                <form method="POST" action="{{ url_for('admin.contact_submission_delete', id=s.id) }}" style="display:inline;" onsubmit="return confirm('Permanently delete this submission? This cannot be undone.');">
+                <form method="POST" action="{{ url_for('admin.contact_submission_delete', id=s.id) }}"
+                    style="display:inline;"
+                    onsubmit="return confirm('Permanently delete this submission? This cannot be undone.');">
                     <button type="submit" class="btn btn-danger btn-sm">Delete Forever</button>
                 </form>
             </div>
@@ -693,14 +712,17 @@
         <div class="details-modal-header">
             <div>
                 <h2 id="modal-product-title">Submission Details</h2>
-                <div id="modal-date-subtitle" style="font-size:0.8rem; color:var(--admin-text-muted); margin-top:0.2rem;"></div>
+                <div id="modal-date-subtitle"
+                    style="font-size:0.8rem; color:var(--admin-text-muted); margin-top:0.2rem;"></div>
             </div>
-            <button type="button" class="details-modal-close" onclick="closeDetailsModal()" aria-label="Close modal">&times;</button>
+            <button type="button" class="details-modal-close" onclick="closeDetailsModal()"
+                aria-label="Close modal">&times;</button>
         </div>
 
         <div class="details-modal-body">
             <!-- Top Status & Contact Bar -->
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; padding-bottom:0.75rem; border-bottom:1px solid #f0f0f0;">
+            <div
+                style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; padding-bottom:0.75rem; border-bottom:1px solid #f0f0f0;">
                 <div>
                     <span class="modal-item-label">Status</span>
                     <div id="modal-status-badge"></div>
@@ -766,182 +788,182 @@
 </div>
 
 <script>
-let currentFilter = 'all';
-let currentSort = 'newest';
-let currentSearch = '';
+    let currentFilter = 'all';
+    let currentSort = 'newest';
+    let currentSearch = '';
 
-function applyFilter(filter) {
-    currentFilter = filter;
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    const activeBtn = document.getElementById('filter-' + filter);
-    if (activeBtn) activeBtn.classList.add('active');
+    function applyFilter(filter) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.getElementById('filter-' + filter);
+        if (activeBtn) activeBtn.classList.add('active');
 
-    if (filter === 'archived') {
-        window.location.hash = 'archived';
-    } else if (window.location.hash === '#archived' || window.location.hash === '#trash') {
-        history.replaceState(null, null, window.location.pathname);
-    }
-
-    renderCards();
-}
-
-function handleSearch(query) {
-    currentSearch = (query || '').toLowerCase().trim();
-    renderCards();
-}
-
-function handleSort(order) {
-    currentSort = order;
-    renderCards();
-}
-
-function clearSearch() {
-    const input = document.getElementById('submission-search');
-    if (input) input.value = '';
-    currentSearch = '';
-    renderCards();
-}
-
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function renderCards() {
-    const container = document.getElementById('submissions-cards-grid');
-    const cards = Array.from(document.querySelectorAll('.submission-card'));
-    const emptyState = document.getElementById('empty-state');
-    const trashBanner = document.getElementById('trash-notice-banner');
-
-    let visibleCount = 0;
-
-    cards.forEach(card => {
-        const status = card.dataset.status;
-        const searchData = (card.dataset.search || '').toLowerCase();
-
-        const matchesFilter = (currentFilter === 'all') || (status === currentFilter);
-        const matchesSearch = !currentSearch || searchData.includes(currentSearch);
-
-        if (matchesFilter && matchesSearch) {
-            card.style.display = 'flex';
-            visibleCount++;
-        } else {
-            card.style.display = 'none';
+        if (filter === 'archived') {
+            window.location.hash = 'archived';
+        } else if (window.location.hash === '#archived' || window.location.hash === '#trash') {
+            history.replaceState(null, null, window.location.pathname);
         }
-    });
 
-    // Sort visible cards
-    cards.sort((a, b) => {
-        const timeA = parseFloat(a.dataset.timestamp) || 0;
-        const timeB = parseFloat(b.dataset.timestamp) || 0;
-        return currentSort === 'newest' ? (timeB - timeA) : (timeA - timeB);
-    });
-
-    cards.forEach(card => container.appendChild(card));
-
-    // Empty state handling
-    if (visibleCount === 0) {
-        emptyState.style.display = 'block';
-        if (currentSearch) {
-            emptyState.innerHTML = '<p>No submissions found matching "<strong>' + escapeHtml(currentSearch) + '</strong>".</p>' +
-                '<button type="button" class="btn btn-outline btn-sm" onclick="clearSearch()" style="margin-top:0.75rem;">Clear Search</button>';
-        } else if (currentFilter === 'active') {
-            emptyState.innerHTML = '<p>No active submissions at this time.</p>';
-        } else if (currentFilter === 'archived') {
-            emptyState.innerHTML = '<p>Trash is empty. No archived submissions.</p>';
-        } else {
-            emptyState.innerHTML = '<p>No submissions received yet.</p>';
-        }
-    } else {
-        emptyState.style.display = 'none';
-    }
-
-    // Toggle trash notice banner
-    if (trashBanner) {
-        trashBanner.style.display = (currentFilter === 'archived') ? 'flex' : 'none';
-    }
-}
-
-// Modal handling
-function openDetailsModal(id) {
-    const dataEl = document.getElementById('sub-data-' + id);
-    if (!dataEl) return;
-    const sub = JSON.parse(dataEl.textContent);
-
-    document.getElementById('modal-product-title').textContent = sub.product || 'Submission Details';
-    document.getElementById('modal-date-subtitle').textContent = sub.date || '';
-    document.getElementById('modal-submitted-date').textContent = sub.date || '—';
-    document.getElementById('modal-sender-name').textContent = sub.name || '—';
-
-    const emailContainer = document.getElementById('modal-sender-email');
-    if (sub.email) {
-        emailContainer.innerHTML = '<a href="mailto:' + escapeHtml(sub.email) + '" style="color:var(--admin-primary);">' + escapeHtml(sub.email) + '</a>';
-    } else {
-        emailContainer.textContent = '—';
-    }
-
-    document.getElementById('modal-field-product').textContent = sub.product || '—';
-    document.getElementById('modal-field-specification').textContent = sub.specification || '—';
-    document.getElementById('modal-field-application').textContent = sub.application || '—';
-    document.getElementById('modal-field-quantity').textContent = sub.quantity || '—';
-    document.getElementById('modal-field-packaging').textContent = sub.packaging || '—';
-    document.getElementById('modal-field-destination').textContent = sub.destination || '—';
-    document.getElementById('modal-field-message').textContent = sub.message || '—';
-
-    const statusBadgeEl = document.getElementById('modal-status-badge');
-    const actionsContainer = document.getElementById('modal-actions-container');
-
-    if (sub.status === 'archived') {
-        statusBadgeEl.innerHTML = '<span class="status-badge status-badge-archived">Archived · ' + sub.days_left + 'd left</span>';
-        actionsContainer.innerHTML =
-            '<form method="POST" action="' + sub.restore_url + '" style="display:inline;">' +
-                '<button type="submit" class="btn btn-primary btn-sm">Restore</button>' +
-            '</form>' +
-            '<form method="POST" action="' + sub.delete_url + '" style="display:inline; margin-left:0.35rem;" onsubmit="return confirm(\'Permanently delete this submission? This cannot be undone.\');">' +
-                '<button type="submit" class="btn btn-danger btn-sm">Delete Forever</button>' +
-            '</form>';
-    } else {
-        statusBadgeEl.innerHTML = '<span class="status-badge status-badge-active">Active</span>';
-        actionsContainer.innerHTML =
-            '<form method="POST" action="' + sub.trash_url + '" style="display:inline;" onsubmit="return confirm(\'Move this submission to Trash?\');">' +
-                '<button type="submit" class="btn btn-danger btn-sm">Delete</button>' +
-            '</form>';
-    }
-
-    const modal = document.getElementById('details-modal');
-    modal.classList.add('modal-active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeDetailsModal() {
-    const modal = document.getElementById('details-modal');
-    if (modal) {
-        modal.classList.remove('modal-active');
-    }
-    document.body.style.overflow = '';
-}
-
-function handleModalBackdropClick(e) {
-    if (e.target.id === 'details-modal') {
-        closeDetailsModal();
-    }
-}
-
-// Close on Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeDetailsModal();
-    }
-});
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
-    if (window.location.hash === '#trash' || window.location.hash === '#archived') {
-        applyFilter('archived');
-    } else {
         renderCards();
     }
-});
+
+    function handleSearch(query) {
+        currentSearch = (query || '').toLowerCase().trim();
+        renderCards();
+    }
+
+    function handleSort(order) {
+        currentSort = order;
+        renderCards();
+    }
+
+    function clearSearch() {
+        const input = document.getElementById('submission-search');
+        if (input) input.value = '';
+        currentSearch = '';
+        renderCards();
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function renderCards() {
+        const container = document.getElementById('submissions-cards-grid');
+        const cards = Array.from(document.querySelectorAll('.submission-card'));
+        const emptyState = document.getElementById('empty-state');
+        const trashBanner = document.getElementById('trash-notice-banner');
+
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const status = card.dataset.status;
+            const searchData = (card.dataset.search || '').toLowerCase();
+
+            const matchesFilter = (currentFilter === 'all') || (status === currentFilter);
+            const matchesSearch = !currentSearch || searchData.includes(currentSearch);
+
+            if (matchesFilter && matchesSearch) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Sort visible cards
+        cards.sort((a, b) => {
+            const timeA = parseFloat(a.dataset.timestamp) || 0;
+            const timeB = parseFloat(b.dataset.timestamp) || 0;
+            return currentSort === 'newest' ? (timeB - timeA) : (timeA - timeB);
+        });
+
+        cards.forEach(card => container.appendChild(card));
+
+        // Empty state handling
+        if (visibleCount === 0) {
+            emptyState.style.display = 'block';
+            if (currentSearch) {
+                emptyState.innerHTML = '<p>No submissions found matching "<strong>' + escapeHtml(currentSearch) + '</strong>".</p>' +
+                    '<button type="button" class="btn btn-outline btn-sm" onclick="clearSearch()" style="margin-top:0.75rem;">Clear Search</button>';
+            } else if (currentFilter === 'active') {
+                emptyState.innerHTML = '<p>No active submissions at this time.</p>';
+            } else if (currentFilter === 'archived') {
+                emptyState.innerHTML = '<p>Trash is empty. No archived submissions.</p>';
+            } else {
+                emptyState.innerHTML = '<p>No submissions received yet.</p>';
+            }
+        } else {
+            emptyState.style.display = 'none';
+        }
+
+        // Toggle trash notice banner
+        if (trashBanner) {
+            trashBanner.style.display = (currentFilter === 'archived') ? 'flex' : 'none';
+        }
+    }
+
+    // Modal handling
+    function openDetailsModal(id) {
+        const dataEl = document.getElementById('sub-data-' + id);
+        if (!dataEl) return;
+        const sub = JSON.parse(dataEl.textContent);
+
+        document.getElementById('modal-product-title').textContent = sub.product || 'Submission Details';
+        document.getElementById('modal-date-subtitle').textContent = sub.date || '';
+        document.getElementById('modal-submitted-date').textContent = sub.date || '—';
+        document.getElementById('modal-sender-name').textContent = sub.name || '—';
+
+        const emailContainer = document.getElementById('modal-sender-email');
+        if (sub.email) {
+            emailContainer.innerHTML = '<a href="mailto:' + escapeHtml(sub.email) + '" style="color:var(--admin-primary);">' + escapeHtml(sub.email) + '</a>';
+        } else {
+            emailContainer.textContent = '—';
+        }
+
+        document.getElementById('modal-field-product').textContent = sub.product || '—';
+        document.getElementById('modal-field-specification').textContent = sub.specification || '—';
+        document.getElementById('modal-field-application').textContent = sub.application || '—';
+        document.getElementById('modal-field-quantity').textContent = sub.quantity || '—';
+        document.getElementById('modal-field-packaging').textContent = sub.packaging || '—';
+        document.getElementById('modal-field-destination').textContent = sub.destination || '—';
+        document.getElementById('modal-field-message').textContent = sub.message || '—';
+
+        const statusBadgeEl = document.getElementById('modal-status-badge');
+        const actionsContainer = document.getElementById('modal-actions-container');
+
+        if (sub.status === 'archived') {
+            statusBadgeEl.innerHTML = '<span class="status-badge status-badge-archived">Archived · ' + sub.days_left + 'd left</span>';
+            actionsContainer.innerHTML =
+                '<form method="POST" action="' + sub.restore_url + '" style="display:inline;">' +
+                '<button type="submit" class="btn btn-primary btn-sm">Restore</button>' +
+                '</form>' +
+                '<form method="POST" action="' + sub.delete_url + '" style="display:inline; margin-left:0.35rem;" onsubmit="return confirm(\'Permanently delete this submission? This cannot be undone.\');">' +
+                '<button type="submit" class="btn btn-danger btn-sm">Delete Forever</button>' +
+                '</form>';
+        } else {
+            statusBadgeEl.innerHTML = '<span class="status-badge status-badge-active">Active</span>';
+            actionsContainer.innerHTML =
+                '<form method="POST" action="' + sub.trash_url + '" style="display:inline;" onsubmit="return confirm(\'Move this submission to Trash?\');">' +
+                '<button type="submit" class="btn btn-danger btn-sm">Delete</button>' +
+                '</form>';
+        }
+
+        const modal = document.getElementById('details-modal');
+        modal.classList.add('modal-active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetailsModal() {
+        const modal = document.getElementById('details-modal');
+        if (modal) {
+            modal.classList.remove('modal-active');
+        }
+        document.body.style.overflow = '';
+    }
+
+    function handleModalBackdropClick(e) {
+        if (e.target.id === 'details-modal') {
+            closeDetailsModal();
+        }
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeDetailsModal();
+        }
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        if (window.location.hash === '#trash' || window.location.hash === '#archived') {
+            applyFilter('archived');
+        } else {
+            renderCards();
+        }
+    });
 </script>
 {% endblock %}
