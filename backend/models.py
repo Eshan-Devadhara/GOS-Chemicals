@@ -1,6 +1,6 @@
 from extensions import db
 from flask_login import UserMixin
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 class Chemical(db.Model):
@@ -20,8 +20,8 @@ class Chemical(db.Model):
     seo_description = db.Column(db.Text)
     display_order = db.Column(db.Integer, default=0)
     status = db.Column(db.String(20), default="draft")
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
 
 class Industry(db.Model):
@@ -56,7 +56,7 @@ class ContactSubmission(db.Model):
     name = db.Column(db.String(200))
     email = db.Column(db.String(200))
     message = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     deleted_at = db.Column(db.DateTime, nullable=True, default=None)
 
     @property
@@ -64,7 +64,7 @@ class ContactSubmission(db.Model):
         if not self.deleted_at:
             return 30
         expires_at = self.deleted_at + timedelta(days=30)
-        remaining = (expires_at - datetime.utcnow()).total_seconds()
+        remaining = (expires_at - datetime.now(timezone.utc)).total_seconds()
         return max(0, int(remaining // 86400) + (1 if remaining % 86400 > 0 else 0))
 
 

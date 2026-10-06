@@ -1,6 +1,6 @@
 import os
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required
 from werkzeug.utils import secure_filename
@@ -274,7 +274,7 @@ def settings():
 
 # --- Contact Submissions ---
 def _purge_expired_trash():
-    cutoff = datetime.utcnow() - timedelta(days=30)
+    cutoff = datetime.now(timezone.utc) - timedelta(days=30)
     ContactSubmission.query.filter(
         ContactSubmission.deleted_at.isnot(None),
         ContactSubmission.deleted_at < cutoff
@@ -301,7 +301,7 @@ def contact_submissions():
 @login_required
 def contact_submission_trash(id):
     submission = ContactSubmission.query.get_or_404(id)
-    submission.deleted_at = datetime.utcnow()
+    submission.deleted_at = datetime.now(timezone.utc)
     db.session.commit()
     flash('Submission moved to Trash.', 'success')
     return redirect(url_for('admin.contact_submissions'))

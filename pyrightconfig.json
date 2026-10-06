@@ -2,11 +2,11 @@
   "executionEnvironments": [
     {
       "root": "backend",
-      "extraPaths": ["backend"]
+      "extraPaths": ["."]
     },
     {
       "root": "api",
-      "extraPaths": ["backend"]
+      "extraPaths": ["../backend"]
     }
   ],
   "reportGeneralTypeIssues": "warning",

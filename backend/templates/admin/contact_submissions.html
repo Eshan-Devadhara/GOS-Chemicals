@@ -286,6 +286,7 @@
         margin-top: 0.2rem;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         word-break: break-word;
@@ -567,7 +568,7 @@
         </div>
 
         <div class="card-action-footer">
-            <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal({{ s.id }})">View
+            <button type="button" class="btn btn-outline btn-sm" data-detail-id="{{ s.id }}" onclick="openDetailsModal(this.dataset.detailId)">View
                 Details</button>
             <div>
                 <form method="POST" action="{{ url_for('admin.contact_submission_trash', id=s.id) }}"
@@ -662,7 +663,7 @@
         </div>
 
         <div class="card-action-footer">
-            <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal({{ s.id }})">View
+            <button type="button" class="btn btn-outline btn-sm" data-detail-id="{{ s.id }}" onclick="openDetailsModal(this.dataset.detailId)">View
                 Details</button>
             <div style="display:flex; gap:0.35rem;">
                 <form method="POST" action="{{ url_for('admin.contact_submission_restore', id=s.id) }}"
