@@ -33,7 +33,7 @@ function renderHeader(s) {
     header.innerHTML = `
         <div class="container">
             <a href="index.html" class="site-logo">
-                <img src="img/logo.svg" alt="${s.site_name || 'GOS Chemicals'} Logo" class="site-logo-img">
+                <img src="img/logo.svg" alt="${s.site_name || 'GOS Chemicals'} - Specialty Chemical Manufacturer India" class="site-logo-img">
                 <span class="site-logo-text">${s.site_name || 'GOS Chemicals'}</span>
             </a>
             <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
@@ -62,7 +62,7 @@ function renderFooter(s) {
             <div class="footer-content">
                 <div class="footer-brand">
                     <a href="index.html" class="site-logo site-logo--footer">
-                        <img src="img/logo.svg" alt="${s.site_name || 'GOS Chemicals'} Logo" class="site-logo-img">
+                        <img src="img/logo.svg" alt="${s.site_name || 'GOS Chemicals'} - Specialty Chemical Manufacturer India" class="site-logo-img">
                         <span class="site-logo-text">${s.site_name || 'GOS Chemicals'}</span>
                     </a>
                     <p>${s.site_tagline || ''}</p>

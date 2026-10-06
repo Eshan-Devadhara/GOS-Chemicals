@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         grid.innerHTML = chemicals.map(c => `
             <a href="product-detail.html?slug=${c.slug}" class="card-link">
                 <div class="card">
-                    ${c.image_url ? `<img src="${c.image_url}" alt="${c.name}" style="border-radius:var(--radius-base); margin-bottom:1rem; height:180px; object-fit:cover; width:100%;">` : ''}
+                    ${c.image_url ? `<img src="${c.image_url}" alt="${c.name} - Specialty Chemical Supplier India" loading="lazy" style="border-radius:var(--radius-base); margin-bottom:1rem; height:180px; object-fit:cover; width:100%;">` : ''}
                     <span class="section-eyebrow">${c.category || ''}</span>
                     <h3>${c.name}</h3>
                     <p>${c.summary || ''}</p>
