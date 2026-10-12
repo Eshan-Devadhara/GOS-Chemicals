@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!content) return;
 
     const params = new URLSearchParams(window.location.search);
-    const slug = params.get('slug');
+    const slug = params.get('slug') || params.get('product');
 
     if (!slug) {
         showNotFound(content);
@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const c = await apiGet(`/chemicals/${slug}`);
         const pageTitle = `${c.seo_title || c.name} | GOS Chemicals`;
         const pageDescription = c.seo_description || c.summary || `${c.name} supplied by GOS Chemicals India. Inquire for specifications and quotation.`;
-        const pageUrl = `https://goschemicals.com/product-detail.html?slug=${encodeURIComponent(c.slug)}`;
+        const queryParam = params.has('product') ? `product=${encodeURIComponent(c.slug)}` : `slug=${encodeURIComponent(c.slug)}`;
+        const pageUrl = `https://goschemicals.com/product-detail.html?${queryParam}`;
         const pageImage = c.image_url || 'https://goschemicals.com/img/logo.png';
 
         document.title = pageTitle;

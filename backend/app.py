@@ -98,6 +98,16 @@ def _is_api_request():
 def initialize_database(app):
     with app.app_context():
         try:
+            # Fast-path check: if tables and initial data already exist, skip heavy schema inspection and bcrypt
+            try:
+                from sqlalchemy import text
+                has_settings = db.session.execute(text("SELECT 1 FROM site_setting LIMIT 1")).scalar()
+                has_admin = db.session.execute(text("SELECT 1 FROM admin_user LIMIT 1")).scalar()
+                if has_settings is not None and has_admin is not None:
+                    return
+            except Exception:
+                db.session.rollback()
+
             db.create_all()
 
             # Idempotent schema migration for cloudinary_public_id

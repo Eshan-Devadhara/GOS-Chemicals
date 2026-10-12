@@ -1,15 +1,62 @@
 {
   "version": 2,
-  "builds": [
+  "cleanUrls": true,
+  "redirects": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python"
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.goschemicals.com"
+        }
+      ],
+      "destination": "https://goschemicals.com/:path*",
+      "permanent": true
     }
   ],
-  "routes": [
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.py" },
+    { "source": "/admin", "destination": "/api/index.py" },
+    { "source": "/admin/(.*)", "destination": "/api/index.py" },
+    { "source": "/", "destination": "/frontend/index.html" },
+    { "source": "/css/(.*)", "destination": "/frontend/css/$1" },
+    { "source": "/js/(.*)", "destination": "/frontend/js/$1" },
+    { "source": "/img/(.*)", "destination": "/frontend/img/$1" },
+    { "source": "/products", "destination": "/frontend/products.html" },
+    { "source": "/custom-manufacturing", "destination": "/frontend/custom-manufacturing.html" },
+    { "source": "/industries", "destination": "/frontend/industries.html" },
+    { "source": "/faq", "destination": "/frontend/faq.html" },
+    { "source": "/contact", "destination": "/frontend/contact.html" },
+    { "source": "/product-detail", "destination": "/frontend/product-detail.html" },
+    { "source": "/(.*)", "destination": "/frontend/$1" }
+  ],
+  "headers": [
     {
-      "src": "/(.*)",
-      "dest": "/api/index.py"
+      "source": "/(css|js|img)/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(ico|svg|png|jpg|jpeg|webp)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=2592000"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=600, stale-while-revalidate=86400"
+        }
+      ]
     }
   ]
 }

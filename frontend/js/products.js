@@ -4,6 +4,16 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // If a product query parameter exists, update canonical URL to self-reference
+    const params = new URLSearchParams(window.location.search);
+    const productParam = params.get('product') || params.get('slug');
+    if (productParam) {
+        const canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) {
+            canonical.setAttribute('href', `https://goschemicals.com/products.html?product=${encodeURIComponent(productParam)}`);
+        }
+    }
+
     const grid = document.getElementById('products-grid');
     if (!grid) return;
 

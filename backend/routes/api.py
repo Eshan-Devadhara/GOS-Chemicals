@@ -1,14 +1,24 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, make_response
 from models import Chemical, Industry, FAQ, SiteSetting, CustomCategory, ContactSubmission
 from extensions import db
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 
+def _cached_json(data, max_age=300, s_maxage=3600):
+    """Return a JSON response with CDN + browser caching headers."""
+    response = make_response(jsonify(data))
+    response.headers['Cache-Control'] = (
+        f'public, max-age={max_age}, s-maxage={s_maxage}, '
+        f'stale-while-revalidate=600'
+    )
+    return response
+
+
 @api_bp.route('/settings')
 def get_settings():
     settings = SiteSetting.query.all()
-    return jsonify({s.key: s.value for s in settings})
+    return _cached_json({s.key: s.value for s in settings})
 
 
 @api_bp.route('/chemicals')
@@ -18,7 +28,7 @@ def get_chemicals():
     if category:
         query = query.filter_by(category=category)
     chemicals = query.all()
-    return jsonify([_chemical_to_dict(c) for c in chemicals])
+    return _cached_json([_chemical_to_dict(c) for c in chemicals])
 
 
 @api_bp.route('/chemicals/<slug>')
@@ -26,25 +36,25 @@ def get_chemical(slug):
     chemical = Chemical.query.filter_by(slug=slug, status='published').first()
     if not chemical:
         return jsonify({'error': 'Not found'}), 404
-    return jsonify(_chemical_to_dict(chemical))
+    return _cached_json(_chemical_to_dict(chemical))
 
 
 @api_bp.route('/industries')
 def get_industries():
     industries = Industry.query.filter_by(status='published').order_by(Industry.display_order).all()
-    return jsonify([{'id': i.id, 'name': i.name, 'description': i.description} for i in industries])
+    return _cached_json([{'id': i.id, 'name': i.name, 'description': i.description} for i in industries])
 
 
 @api_bp.route('/faqs')
 def get_faqs():
     faqs = FAQ.query.filter_by(status='published').order_by(FAQ.display_order).all()
-    return jsonify([{'id': f.id, 'question': f.question, 'answer': f.answer} for f in faqs])
+    return _cached_json([{'id': f.id, 'question': f.question, 'answer': f.answer} for f in faqs])
 
 
 @api_bp.route('/custom-categories')
 def get_custom_categories():
     cats = CustomCategory.query.order_by(CustomCategory.display_order).all()
-    return jsonify([{'id': c.id, 'name': c.name} for c in cats])
+    return _cached_json([{'id': c.id, 'name': c.name} for c in cats])
 
 
 @api_bp.route('/contact', methods=['POST'])

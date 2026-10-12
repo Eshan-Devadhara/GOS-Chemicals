@@ -1,12 +1,26 @@
 {
+  "include": [
+    "backend",
+    "api"
+  ],
+  "extraPaths": [
+    "backend",
+    "."
+  ],
   "executionEnvironments": [
     {
       "root": "backend",
-      "extraPaths": ["."]
+      "extraPaths": [
+        ".",
+        "backend"
+      ]
     },
     {
       "root": "api",
-      "extraPaths": ["../backend"]
+      "extraPaths": [
+        "../backend",
+        "backend"
+      ]
     }
   ],
   "reportGeneralTypeIssues": "warning",

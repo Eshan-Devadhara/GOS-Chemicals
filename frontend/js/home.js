@@ -24,9 +24,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function renderHero(s) {
     const el = document.getElementById('hero-content');
-    if (!el) return;
+    if (!el || !s || !s.hero_headline) return;
     el.innerHTML = `
-        <h1>${s.hero_headline || ''}</h1>
+        <h1>${s.hero_headline}</h1>
         <p class="hero-sub">${s.hero_subheadline || ''}</p>
         <p class="hero-intro">${s.hero_intro || ''}</p>
         <div class="hero-actions">

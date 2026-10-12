@@ -3,16 +3,31 @@
    Renders shared header/nav and footer from /api/settings on every page.
    ========================================================================== */
 
+const DEFAULT_SETTINGS = {
+    site_name: 'GOS Chemicals',
+    site_tagline: 'Specialty Chemicals Manufactured & Exported from India',
+    cta_primary_label: 'Request a Quote',
+    contact_email: 'info@goschemicals.com',
+    contact_phone: '+91-XXXXXXXXXX',
+    contact_address: 'India'
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
-    let settings = {};
+    // Render immediately from cached settings or defaults (0ms visual delay)
+    const initialSettings = (typeof apiGetCachedSync === 'function' ? apiGetCachedSync('/settings') : null) || DEFAULT_SETTINGS;
+    renderHeader(initialSettings);
+    renderFooter(initialSettings);
+
+    // Revalidate settings in background
     try {
-        settings = await apiGet('/settings');
+        const freshSettings = await apiGet('/settings');
+        if (freshSettings && JSON.stringify(freshSettings) !== JSON.stringify(initialSettings)) {
+            renderHeader(freshSettings);
+            renderFooter(freshSettings);
+        }
     } catch (e) {
         console.error('Failed to load settings:', e);
     }
-
-    renderHeader(settings);
-    renderFooter(settings);
 });
 
 function renderHeader(s) {
