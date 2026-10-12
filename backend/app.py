@@ -57,7 +57,14 @@ def create_app():
     @app.route('/<path:filename>')
     def serve_frontend(filename):
         try:
-            return send_from_directory(frontend_dir, filename)
+            response = send_from_directory(frontend_dir, filename)
+            if any(filename.lower().endswith(ext) for ext in ('.css', '.js', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.ico', '.woff', '.woff2')):
+                response.headers['Cache-Control'] = 'public, max-age=86400, stale-while-revalidate=604800'
+            elif filename.lower().endswith('.html'):
+                response.headers['Cache-Control'] = 'public, max-age=600, stale-while-revalidate=86400'
+            elif filename.lower() in ('robots.txt', 'sitemap.xml'):
+                response.headers['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400'
+            return response
         except Exception:
             return send_from_directory(frontend_dir, 'index.html')
 
