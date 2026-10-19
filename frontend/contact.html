@@ -53,54 +53,94 @@
         <div class="container">
             <span class="section-eyebrow">Commercial Quotation</span>
             <h1>Request a Commercial Chemical Quotation</h1>
-            <p>Submit your required chemical product, specification, order quantity, and destination port for an immediate B2B quotation.</p>
+            <p>Submit your chemical grade, target specifications, order quantity, and destination port for an immediate B2B commercial offer.</p>
         </div>
     </div>
 
     <section class="section">
         <div class="container">
-            <form class="contact-form" id="contact-form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="product">Product / Chemical Name *</label>
-                        <input type="text" id="product" name="product" placeholder="e.g. Castor Oil FSG, CPW 52%, Bleaching Earth">
-                    </div>
-                    <div class="form-group">
-                        <label for="specification">Target Specification / Grade</label>
-                        <input type="text" id="specification" name="specification" placeholder="e.g. First Special Grade / IS / BP / Custom Spec">
-                    </div>
-                    <div class="form-group">
-                        <label for="application">Intended Application</label>
-                        <input type="text" id="application" name="application" placeholder="e.g. PVC plasticizer, lubricant synthesis, oil refining">
-                    </div>
-                    <div class="form-group">
-                        <label for="quantity">Estimated Order Quantity</label>
-                        <input type="text" id="quantity" name="quantity" placeholder="e.g. 20 MT FCL, ISO Tank, Trial Batch">
-                    </div>
-                    <div class="form-group">
-                        <label for="packaging">Preferred Export Packaging</label>
-                        <input type="text" id="packaging" name="packaging" placeholder="e.g. 200 kg Drums, Flexi-tanks, IBCs, 25 kg Bags">
-                    </div>
-                    <div class="form-group">
-                        <label for="destination">Destination Port / Country</label>
-                        <input type="text" id="destination" name="destination" placeholder="e.g. Rotterdam, Jebel Ali, Antwerp, Houston">
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Contact Person *</label>
-                        <input type="text" id="name" name="name" required placeholder="Full name">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Business Email Address *</label>
-                        <input type="email" id="email" name="email" required placeholder="procurement@company.com">
-                    </div>
-                    <div class="form-group full-width">
-                        <label for="message">Technical Requirements / Additional Details</label>
-                        <textarea id="message" name="message" rows="4" placeholder="Detail any specific COA requirements, delivery schedule, or custom manufacturing parameters..."></textarea>
-                    </div>
+            <div class="contact-layout">
+                <!-- Form Column -->
+                <div class="contact-form-container">
+                    <form class="contact-form" id="contact-form" novalidate>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="product">Product / Chemical Name *</label>
+                                <input type="text" id="product" name="product" required placeholder="e.g. Castor Oil FSG, CPW 52%, Bleaching Earth">
+                            </div>
+                            <div class="form-group">
+                                <label for="specification">Target Specification / Grade</label>
+                                <input type="text" id="specification" name="specification" placeholder="e.g. First Special Grade / IS / BP / Custom Spec">
+                            </div>
+                            <div class="form-group">
+                                <label for="application">Intended Application</label>
+                                <input type="text" id="application" name="application" placeholder="e.g. PVC plasticizer, lubricant synthesis, oil refining">
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Estimated Order Quantity</label>
+                                <input type="text" id="quantity" name="quantity" placeholder="e.g. 20 MT FCL, ISO Tank, Trial Batch">
+                            </div>
+                            <div class="form-group">
+                                <label for="packaging">Preferred Export Packaging</label>
+                                <input type="text" id="packaging" name="packaging" placeholder="e.g. 200 kg Drums, Flexi-tanks, IBCs, 25 kg Bags">
+                            </div>
+                            <div class="form-group">
+                                <label for="destination">Destination Port / Country</label>
+                                <input type="text" id="destination" name="destination" placeholder="e.g. Rotterdam, Jebel Ali, Antwerp, Houston">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Contact Person *</label>
+                                <input type="text" id="name" name="name" required placeholder="Full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Business Email Address *</label>
+                                <input type="email" id="email" name="email" required placeholder="procurement@company.com">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="message">Technical Requirements / Additional Details</label>
+                                <textarea id="message" name="message" rows="4" placeholder="Detail any specific COA parameters, delivery schedules, testing protocols, or custom synthesis requirements..."></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 1rem; width: 100%;">Submit Quotation Request</button>
+                        <div class="form-status" id="form-status" role="alert" aria-live="polite"></div>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;">Submit Quotation Request</button>
-                <div class="form-status" id="form-status"></div>
-            </form>
+
+                <!-- Commercial & Export Sidebar -->
+                <aside class="contact-sidebar">
+                    <h3>Commercial &amp; Technical Support</h3>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">✉</div>
+                        <div class="contact-info-text">
+                            <strong>Direct Inquiries</strong>
+                            <a href="mailto:info@goschemicals.com">info@goschemicals.com</a>
+                            <p style="font-size:0.8rem; margin-top:0.2rem;">Prompt response within 24 business hours</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">🏭</div>
+                        <div class="contact-info-text">
+                            <strong>Manufacturing Base</strong>
+                            Gujarat, India
+                            <p style="font-size:0.8rem; margin-top:0.2rem;">Direct access to major port hubs: Mundra, Kandla, Nhava Sheva (JNPT)</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">📋</div>
+                        <div class="contact-info-text">
+                            <strong>Export Documentation</strong>
+                            Certificate of Analysis (COA), Technical Data Sheet (TDS), MSDS / SDS, and Certificate of Origin with every shipment.
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">📦</div>
+                        <div class="contact-info-text">
+                            <strong>Packaging Standards</strong>
+                            New 200 kg steel/plastic drums, 1,000 L IBCs, ISO tanks, Flexi-tanks, and 25 kg multi-wall bags with palletization.
+                        </div>
+                    </div>
+                </aside>
+            </div>
         </div>
     </section>
 

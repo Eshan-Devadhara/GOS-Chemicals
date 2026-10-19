@@ -1,6 +1,7 @@
 /* ==========================================================================
    Product Detail Page — GOS Chemicals
    Reads ?slug= from URL, fetches single chemical, renders full detail.
+   Uses design system classes for polished B2B industrial layout.
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    content.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>Loading...</p></div>';
+    content.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>Loading chemical specification...</p></div>';
 
     try {
         const c = await apiGet(`/chemicals/${slug}`);
@@ -100,28 +101,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         content.innerHTML = `
             <div class="container">
-                <div style="margin-bottom: 1rem;">
-                    <a href="products.html" style="font-size:0.85rem; color:var(--color-text-muted);">← Back to Products Portfolio</a>
-                </div>
-                <div style="display: grid; grid-template-columns: ${c.image_url ? '1fr 1fr' : '1fr'}; gap: 3rem; align-items: start;">
+                <nav class="product-breadcrumb" aria-label="Breadcrumb">
+                    <a href="products.html">← Back to Products Portfolio</a>
+                </nav>
+
+                <div class="product-hero ${c.image_url ? '' : 'product-hero--single'}">
                     ${c.image_url ? `<img src="${c.image_url}" alt="${imageAltText}" class="product-image">` : ''}
                     <div>
                         <span class="section-eyebrow">${c.category || 'Specialty Chemical'}</span>
                         <h1>${c.name}</h1>
-                        <p style="color:var(--color-text-muted); margin-top:0.75rem; line-height:1.7;">${c.summary || ''}</p>
-                        <div style="margin-top:2rem;">
+                        <p style="color:var(--color-text-muted); margin:0.85rem 0 1.75rem 0; font-size:1.05rem; line-height:1.7;">${c.summary || ''}</p>
+                        <div>
                             <a href="contact.html?product=${encodeURIComponent(c.name)}" class="btn btn-primary">${c.cta_label || 'Request a Commercial Quote'}</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="product-meta" style="margin-top: 3rem;">
+                <div class="product-meta">
                     <div class="product-meta-item">
-                        <h2>Product Overview & Description</h2>
+                        <h2>Product Overview &amp; Description</h2>
                         <p>${descriptionHtml}</p>
                     </div>
                     <div class="product-meta-item">
-                        <h2>Technical Specifications</h2>
+                        <h2>Technical Specifications &amp; Quality</h2>
                         <p>${c.specification || 'Technical specifications and Certificate of Analysis (COA) available upon request.'}</p>
                     </div>
                     ${apps.length ? `
@@ -130,20 +132,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <ul>${apps.map(a => `<li>${a}</li>`).join('')}</ul>
                     </div>` : ''}
                     <div class="product-meta-item">
-                        <h2>Packaging & Export Options</h2>
+                        <h2>Packaging &amp; Export Logistics</h2>
                         <p>${c.packaging || 'Export-grade packaging options available: drums, flexi-tanks, IBCs, and bulk shipments.'}</p>
                     </div>
                 </div>
 
                 <!-- Internal linking & conversion card -->
-                <div style="margin-top: 3.5rem; padding: 2rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-base); text-align: center;">
+                <div class="product-cta-card">
                     <h3>Need a Custom Grade or Modified Formulation?</h3>
-                    <p style="color: var(--color-text-muted); margin: 0.75rem auto 1.5rem; max-width: 600px;">
+                    <p>
                         GOS Chemicals provides toll synthesis and custom chemical manufacturing tailored to your exact process requirements.
                     </p>
-                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                        <a href="custom-manufacturing.html" class="btn btn-outline">Custom Manufacturing</a>
-                        <a href="contact.html?product=${encodeURIComponent(c.name)}" class="btn btn-primary">Request Specification Sheet</a>
+                    <div class="btn-actions">
+                        <a href="custom-manufacturing.html" class="btn btn-outline-light">Custom Manufacturing</a>
+                        <a href="contact.html?product=${encodeURIComponent(c.name)}" class="btn btn-primary-light">Request Specification Sheet</a>
                     </div>
                 </div>
             </div>
@@ -157,7 +159,7 @@ function showNotFound(el) {
     el.innerHTML = `
         <div class="not-found">
             <h2>Product Not Found</h2>
-            <p>The product you're looking for doesn't exist or is no longer available.</p>
+            <p>The product you are looking for does not exist or has been moved.</p>
             <a href="products.html" class="btn btn-primary">Browse All Products</a>
         </div>
     `;
